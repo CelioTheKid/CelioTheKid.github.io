@@ -4,15 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Célio Assis | NOC & Network Engineering Lab</title>
+  
+  <!-- Mermaid.js para renderização de diagramas de topologia -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+
   <style>
     :root {
       --bg: #090d13;
-      --card-bg: rgba(22, 27, 34, 0.75);
+      --card-bg: rgba(22, 27, 34, 0.85);
       --border: rgba(48, 54, 61, 0.8);
       --accent: #58a6ff;
       --text: #c9d1d9;
       --heading: #f0f6fc;
-      --terminal: #03dac6;
+      --terminal-green: #39ff14;
+      --terminal-cyan: #03dac6;
+      --status-up: #2ea043;
       --insta-gradient: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -39,7 +46,7 @@
     }
 
     .container {
-      max-width: 850px;
+      max-width: 900px;
       margin: 0 auto;
       position: relative;
       z-index: 1;
@@ -49,7 +56,7 @@
       border-bottom: 1px solid var(--border);
       padding-bottom: 1.5rem;
       margin-bottom: 2rem;
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(10px);
     }
 
     h1 { color: var(--heading); font-size: 1.8rem; margin-bottom: 0.3rem; }
@@ -76,17 +83,8 @@
       border-radius: 6px;
       transition: opacity 0.2s ease, transform 0.1s ease;
     }
-
-    .btn-insta:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
-    }
-
-    .btn-insta svg {
-      width: 16px;
-      height: 16px;
-      fill: currentColor;
-    }
+    .btn-insta:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-insta svg { width: 16px; height: 16px; fill: currentColor; }
 
     .card {
       background: var(--card-bg);
@@ -104,12 +102,32 @@
       margin-bottom: 0.75rem;
       border-bottom: 1px solid var(--border);
       padding-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
+
+    /* Grid de Status */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    .status-item {
+      background: rgba(13, 17, 23, 0.7);
+      border: 1px solid var(--border);
+      padding: 0.75rem;
+      border-radius: 6px;
+    }
+    .status-label { font-size: 0.8rem; color: #8b949e; }
+    .status-val { font-size: 1rem; font-weight: 600; color: var(--heading); display: flex; align-items: center; gap: 0.4rem; }
+    .indicator { width: 8px; height: 8px; border-radius: 50%; background: var(--status-up); box-shadow: 0 0 8px var(--status-up); }
 
     .badge {
       display: inline-block;
       background: rgba(33, 38, 45, 0.85);
-      color: var(--terminal);
+      color: var(--terminal-cyan);
       border: 1px solid var(--border);
       padding: 0.2rem 0.6rem;
       border-radius: 4px;
@@ -118,16 +136,104 @@
       margin: 0.2rem 0.2rem 0.2rem 0;
     }
 
+    /* Terminal CLI */
+    .terminal-box {
+      background: rgba(0, 0, 0, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem;
+      font-family: "Courier New", Courier, monospace;
+      color: var(--terminal-green);
+      min-height: 180px;
+      font-size: 0.85rem;
+    }
+    .terminal-output {
+      white-space: pre-wrap;
+      max-height: 220px;
+      overflow-y: auto;
+      margin-bottom: 0.5rem;
+    }
+    .terminal-input-line {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .terminal-prompt { color: var(--accent); }
+    .terminal-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-family: inherit;
+      font-size: inherit;
+      flex-grow: 1;
+    }
+
+    /* Subnet Calc */
+    .calc-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .calc-input {
+      background: #0d1117;
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 0.5rem;
+      border-radius: 4px;
+      outline: none;
+      font-family: monospace;
+      flex-grow: 1;
+    }
+    .calc-btn {
+      background: var(--accent);
+      color: #000;
+      font-weight: 600;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .calc-results {
+      background: #0d1117;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.75rem;
+      font-family: monospace;
+      font-size: 0.85rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.5rem;
+    }
+
+    /* Runbooks com Botão Copiar */
+    .runbook-block {
+      position: relative;
+      margin-top: 0.75rem;
+    }
     pre {
       background: rgba(0, 0, 0, 0.85);
-      color: #39ff14;
+      color: var(--terminal-green);
       padding: 1rem;
       border-radius: 6px;
       overflow-x: auto;
       font-size: 0.85rem;
       border: 1px solid var(--border);
-      margin-top: 0.5rem;
     }
+    .btn-copy {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #21262d;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-copy:hover { background: #30363d; }
 
     footer {
       text-align: center;
@@ -160,47 +266,124 @@
       </div>
     </header>
 
+    <!-- 1. LIVE STATUS DASHBOARD -->
     <section class="card">
-      <h2>Tecnologias & Ferramentas Validadas</h2>
+      <h2>Lab Live Status</h2>
+      <div class="status-grid">
+        <div class="status-item">
+          <div class="status-label">WireGuard Gateway</div>
+          <div class="status-val"><div class="indicator"></div> 10.20.20.1 (UP)</div>
+        </div>
+        <div class="status-item">
+          <div class="status-label">L2TP/IPsec Peer (Mateus)</div>
+          <div class="status-val"><div class="indicator"></div> 10.10.10.48 (ESTABLISHED)</div>
+        </div>
+        <div class="status-item">
+          <div class="status-label">IGP Core (OSPF Area 0)</div>
+          <div class="status-val"><div class="indicator"></div> CONVERGED</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. DIAGRAMA DE TOPOLOGIA -->
+    <section class="card">
+      <h2>Topologia de Transporte & Gerência</h2>
+      <div class="mermaid">
+graph LR
+    subgraph WAN_Access [Acesso Remoto]
+        MOBILE[📱 Celular WireGuard<br>10.20.20.2]
+        MATEUS[🏢 RB Mateus L2TP<br>10.10.10.48]
+    end
+
+    subgraph CORE_ISP [Core Lab MikroTik RB493]
+        CORE[⚡ Borda / BRAS<br>10.255.255.1]
+    end
+
+    subgraph ACCESS_GPON [Agregação & Acesso]
+        OLT[🔌 OLT ZTE GPON]
+        CLI[🏠 Clientes FTTH]
+    end
+
+    MOBILE -->|UDP 51820| CORE
+    MATEUS -->|IPsec Tunnel| CORE
+    CORE ===|VPLS / MPLS L2| OLT
+    OLT --- CLI
+      </div>
+    </section>
+
+    <!-- 3. TERMINAL CLI INTERATIVO -->
+    <section class="card">
+      <h2>NOC Interactive CLI</h2>
+      <div class="terminal-box">
+        <div class="terminal-output" id="term-out">NOC Console v7.6 Initialized.
+Type 'help' to list available network diagnostics commands.</div>
+        <div class="terminal-input-line">
+          <span class="terminal-prompt">[admin@noc-lab]$</span>
+          <input type="text" id="term-in" class="terminal-input" autofocus autocomplete="off" spellcheck="false">
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. CALCULADORA DE SUB-REDE -->
+    <section class="card">
+      <h2>Calculadora de Sub-rede / CIDR</h2>
+      <div class="calc-row">
+        <input type="text" id="calc-ip" class="calc-input" placeholder="Ex: 10.255.0.1/30 ou 192.168.100.0/24">
+        <button class="calc-btn" onclick="calculateSubnet()">Calcular</button>
+      </div>
+      <div class="calc-results" id="calc-out">
+        <div><strong>Rede:</strong> <span id="res-net">-</span></div>
+        <div><strong>Máscara:</strong> <span id="res-mask">-</span></div>
+        <div><strong>Wildcard:</strong> <span id="res-wild">-</span></div>
+        <div><strong>Primeiro Host:</strong> <span id="res-first">-</span></div>
+        <div><strong>Último Host:</strong> <span id="res-last">-</span></div>
+        <div><strong>Broadcast:</strong> <span id="res-bcast">-</span></div>
+      </div>
+    </section>
+
+    <!-- 5. STACK TÉCNICA -->
+    <section class="card">
+      <h2>Tecnologias & Protocolos Validados</h2>
       <span class="badge">MikroTik RouterOS v7</span>
       <span class="badge">WireGuard VPN</span>
       <span class="badge">L2TP / IPsec</span>
       <span class="badge">OSPF v2/v3</span>
       <span class="badge">MPLS / LDP</span>
       <span class="badge">VPLS L2VPN</span>
-      <span class="badge">FTTx / GPON</span>
+      <span class="badge">FTTx / GPON ZTE</span>
     </section>
 
+    <!-- 6. RUNBOOKS DE RESGATE NOC -->
     <section class="card">
-      <h2>Laboratórios & Projetos Recentes</h2>
-      <p><strong>1. VPN de Gerência Móvel & Interconexão Site-to-Site</strong></p>
-      <p style="font-size: 0.9rem; color: #8b949e;">Implementação de túneis WireGuard e L2TP/IPsec nativo sobre MikroTik Cloud DDNS para acesso operacional seguro e transparente.</p>
-      <br>
-      <p><strong>2. Core de Transporte ISP (MPLS / LDP / VPLS)</strong></p>
-      <p style="font-size: 0.9rem; color: #8b949e;">Simulação de transporte L2 transparente entre BRAS e OLTs GPON sobre IGP convergido.</p>
-    </section>
+      <h2>NOC Quick Runbooks</h2>
+      
+      <p><strong>1. Reset Rápido de Tabela ARP e Flushing de DNS</strong></p>
+      <div class="runbook-block">
+        <button class="btn-copy" onclick="copyCode('code1')">Copiar</button>
+        <pre id="code1">/ip arp remove [find dynamic=yes]
+/ip dns cache flush</pre>
+      </div>
 
-    <section class="card">
-      <h2>Quick Terminal Reference</h2>
-      <pre>
-# Validação de Túneis e Roteamento
-/interface wireguard peers print stats
-/ppp active print
-/routing ospf neighbor print
-/mpls forwarding-table print</pre>
+      <p style="margin-top: 1rem;"><strong>2. Monitoramento de Sessões L2TP e WireGuard</strong></p>
+      <div class="runbook-block">
+        <button class="btn-copy" onclick="copyCode('code2')">Copiar</button>
+        <pre id="code2">/interface wireguard peers print stats
+/ppp active print</pre>
+      </div>
     </section>
 
     <footer>
-      <p>Desenvolvido e mantido para laboratórios práticos de infraestrutura.</p>
+      <p>Desenvolvido e mantido por Célio Assis | Operações e Laboratórios de Rede.</p>
     </footer>
   </div>
 
+  <!-- SCRIPTS FUNCIONAIS -->
   <script>
+    /* 1. ANIMAÇÃO DE FUNDO CANVAS MESH */
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
     let width = canvas.width = window.innerWidth;
     let height = canvas.height = window.innerHeight;
-
     let particles = [];
     const particleCount = Math.min(Math.floor((width * height) / 14000), 75);
 
@@ -222,28 +405,20 @@
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fillStyle = '#58a6ff';
-        ctx.shadowBlur = 6;
-        ctx.shadowColor = '#58a6ff';
         ctx.fill();
       }
     }
-
-    for (let i = 0; i < particleCount; i++) {
-      particles.push(new Particle());
-    }
+    for (let i = 0; i < particleCount; i++) particles.push(new Particle());
 
     function animate() {
       ctx.clearRect(0, 0, width, height);
-
       for (let i = 0; i < particles.length; i++) {
         particles[i].update();
         particles[i].draw();
-
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-
           if (dist < 120) {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
@@ -256,13 +431,81 @@
       }
       requestAnimationFrame(animate);
     }
-
     window.addEventListener('resize', () => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
     });
-
     animate();
+
+    /* 2. TERMINAL CLI */
+    const termIn = document.getElementById('term-in');
+    const termOut = document.getElementById('term-out');
+
+    termIn.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        const cmd = this.value.trim().toLowerCase();
+        let resp = '';
+
+        if (cmd === 'help') {
+          resp = "Available commands:\n  help        - Show this menu\n  ping <ip>   - Test latency to remote node\n  show ospf   - View OSPF IGP state\n  status vpn  - Inspect active WireGuard and L2TP tunnels\n  clear       - Clear screen";
+        } else if (cmd.startsWith('ping')) {
+          const target = cmd.split(' ')[1] || '8.8.8.8';
+          resp = `PING ${target} 56(84) bytes of data.\n64 bytes from ${target}: icmp_seq=1 ttl=118 time=48.2 ms\n64 bytes from ${target}: icmp_seq=2 ttl=118 time=47.9 ms\n--- ${target} ping statistics ---\n2 packets transmitted, 2 received, 0% packet loss`;
+        } else if (cmd === 'show ospf') {
+          resp = "OSPF Instance: ospf-core | Area: 0.0.0.0 (Backbone)\nNeighbor ID      Priority   State          Dead Time   Address\n10.255.255.2     1          Full/Backup    00:00:34    10.10.10.48";
+        } else if (cmd === 'status vpn') {
+          resp = "[WIREGUARD] wg-lab (Port 51820): Active (Peer: Celular S24+)\n[L2TP/IPSEC]  mateus -> 10.10.10.48 (State: ESTABLISHED | Uptime: OK)";
+        } else if (cmd === 'clear') {
+          termOut.innerText = '';
+          this.value = '';
+          return;
+        } else if (cmd === '') {
+          resp = '';
+        } else {
+          resp = `bad command: '${cmd}'. Type 'help' for reference.`;
+        }
+
+        termOut.innerText += `\n[admin@noc-lab]$ ${this.value}\n${resp}`;
+        this.value = '';
+        termOut.scrollTop = termOut.scrollHeight;
+      }
+    });
+
+    /* 3. CALCULADORA CIDR */
+    function ipToInt(ip) {
+      return ip.split('.').reduce((acc, oct) => (acc << 8) + parseInt(oct, 10), 0) >>> 0;
+    }
+    function intToIp(int) {
+      return [(int >>> 24) & 255, (int >>> 16) & 255, (int >>> 8) & 255, int & 255].join('.');
+    }
+    function calculateSubnet() {
+      const val = document.getElementById('calc-ip').value.trim();
+      if (!val.includes('/')) return alert('Insira no formato IP/CIDR (ex: 10.255.0.1/30)');
+      const [ipStr, cidrStr] = val.split('/');
+      const cidr = parseInt(cidrStr, 10);
+      if (cidr < 0 || cidr > 32) return alert('CIDR inválido (0-32)');
+
+      const ip = ipToInt(ipStr);
+      const mask = cidr === 0 ? 0 : (~0 << (32 - cidr)) >>> 0;
+      const wildcard = ~mask >>> 0;
+      const net = (ip & mask) >>> 0;
+      const bcast = (net | wildcard) >>> 0;
+
+      document.getElementById('res-net').innerText = intToIp(net) + '/' + cidr;
+      document.getElementById('res-mask').innerText = intToIp(mask);
+      document.getElementById('res-wild').innerText = intToIp(wildcard);
+      document.getElementById('res-first').innerText = cidr >= 31 ? intToIp(net) : intToIp(net + 1);
+      document.getElementById('res-last').innerText = cidr >= 31 ? intToIp(bcast) : intToIp(bcast - 1);
+      document.getElementById('res-bcast').innerText = intToIp(bcast);
+    }
+
+    /* 4. COPIAR CÓDIGO */
+    function copyCode(id) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Comando copiado para a área de transferência!');
+      });
+    }
   </script>
 </body>
 </html>
