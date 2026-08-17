@@ -6,9 +6,9 @@
   <title>Célio Assis | NOC & Network Engineering Lab</title>
   <style>
     :root {
-      --bg: #0d1117;
-      --card-bg: #161b22;
-      --border: #30363d;
+      --bg: #090d13;
+      --card-bg: rgba(22, 27, 34, 0.75);
+      --border: rgba(48, 54, 61, 0.8);
       --accent: #58a6ff;
       --text: #c9d1d9;
       --heading: #f0f6fc;
@@ -16,31 +16,53 @@
       --insta-gradient: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    
     body {
       background-color: var(--bg);
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
       line-height: 1.6;
       padding: 2rem 1rem;
+      position: relative;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
+
+    #bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+    }
+
     .container {
       max-width: 850px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
+
     header {
       border-bottom: 1px solid var(--border);
       padding-bottom: 1.5rem;
       margin-bottom: 2rem;
+      backdrop-filter: blur(8px);
     }
+
     h1 { color: var(--heading); font-size: 1.8rem; margin-bottom: 0.3rem; }
     .subtitle { color: var(--accent); font-family: monospace; font-size: 0.95rem; }
     .bio { margin-top: 1rem; font-size: 1rem; color: var(--text); }
+    
     .links-bar {
       margin-top: 1.2rem;
       display: flex;
       gap: 0.75rem;
       flex-wrap: wrap;
     }
+
     .btn-insta {
       display: inline-flex;
       align-items: center;
@@ -54,22 +76,28 @@
       border-radius: 6px;
       transition: opacity 0.2s ease, transform 0.1s ease;
     }
+
     .btn-insta:hover {
       opacity: 0.9;
       transform: translateY(-1px);
     }
+
     .btn-insta svg {
       width: 16px;
       height: 16px;
       fill: currentColor;
     }
+
     .card {
       background: var(--card-bg);
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 8px;
       padding: 1.25rem;
       margin-bottom: 1.5rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
     }
+
     .card h2 {
       color: var(--heading);
       font-size: 1.2rem;
@@ -77,9 +105,10 @@
       border-bottom: 1px solid var(--border);
       padding-bottom: 0.4rem;
     }
+
     .badge {
       display: inline-block;
-      background: #21262d;
+      background: rgba(33, 38, 45, 0.85);
       color: var(--terminal);
       border: 1px solid var(--border);
       padding: 0.2rem 0.6rem;
@@ -88,8 +117,9 @@
       font-family: monospace;
       margin: 0.2rem 0.2rem 0.2rem 0;
     }
+
     pre {
-      background: #000;
+      background: rgba(0, 0, 0, 0.85);
       color: #39ff14;
       padding: 1rem;
       border-radius: 6px;
@@ -98,6 +128,7 @@
       border: 1px solid var(--border);
       margin-top: 0.5rem;
     }
+
     footer {
       text-align: center;
       margin-top: 3rem;
@@ -109,6 +140,8 @@
   </style>
 </head>
 <body>
+  <canvas id="bg-canvas"></canvas>
+
   <div class="container">
     <header>
       <h1>Célio Assis</h1>
@@ -161,5 +194,75 @@
       <p>Desenvolvido e mantido para laboratórios práticos de infraestrutura.</p>
     </footer>
   </div>
+
+  <script>
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    let particles = [];
+    const particleCount = Math.min(Math.floor((width * height) / 14000), 75);
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.6;
+        this.vy = (Math.random() - 0.5) * 0.6;
+        this.radius = Math.random() * 1.5 + 1;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > width) this.vx *= -1;
+        if (this.y < 0 || this.y > height) this.vy *= -1;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = '#58a6ff';
+        ctx.shadowBlur = 6;
+        ctx.shadowColor = '#58a6ff';
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 120) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(88, 166, 255, ${0.18 * (1 - dist / 120)})`;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    animate();
+  </script>
 </body>
 </html>
