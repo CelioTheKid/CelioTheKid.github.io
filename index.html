@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Célio Assis | NOC & Network Engineering Lab</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card-bg: #161b22;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --text: #c9d1d9;
+      --heading: #f0f6fc;
+      --terminal: #03dac6;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+    .container {
+      max-width: 850px;
+      margin: 0 auto;
+    }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    h1 { color: var(--heading); font-size: 1.8rem; margin-bottom: 0.3rem; }
+    .subtitle { color: var(--accent); font-family: monospace; font-size: 0.95rem; }
+    .bio { margin-top: 1rem; font-size: 1rem; color: var(--text); }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .card h2 {
+      color: var(--heading);
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.4rem;
+    }
+    .badge {
+      display: inline-block;
+      background: #21262d;
+      color: var(--terminal);
+      border: 1px solid var(--border);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-family: monospace;
+      margin: 0.2rem 0.2rem 0.2rem 0;
+    }
+    pre {
+      background: #000;
+      color: #39ff14;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      border: 1px solid var(--border);
+      margin-top: 0.5rem;
+    }
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 0.85rem;
+      color: #8b949e;
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Célio Assis</h1>
+      <p class="subtitle">&gt; Network Technician | NOC & Infrastructure Operations</p>
+      <p class="bio">
+        Documentação de topologias, laboratórios de roteamento avançado, VPNs seguras e infraestrutura de telecomunicações.
+      </p>
+    </header>
+
+    <section class="card">
+      <h2>Tecnologias & Ferramentas Validadas</h2>
+      <span class="badge">MikroTik RouterOS v7</span>
+      <span class="badge">WireGuard VPN</span>
+      <span class="badge">L2TP / IPsec</span>
+      <span class="badge">OSPF v2/v3</span>
+      <span class="badge">MPLS / LDP</span>
+      <span class="badge">VPLS L2VPN</span>
+      <span class="badge">FTTx / GPON</span>
+    </section>
+
+    <section class="card">
+      <h2>Laboratórios & Projetos Recentes</h2>
+      <p><strong>1. VPN de Gerência Móvel & Interconexão Site-to-Site</strong></p>
+      <p style="font-size: 0.9rem; color: #8b949e;">Implementação de túneis WireGuard e L2TP/IPsec nativo sobre MikroTik Cloud DDNS para acesso operacional seguro e transparente.</p>
+      <br>
+      <p><strong>2. Core de Transporte ISP (MPLS / LDP / VPLS)</strong></p>
+      <p style="font-size: 0.9rem; color: #8b949e;">Simulação de transporte L2 transparente entre BRAS e OLTs GPON sobre IGP convergido.</p>
+    </section>
+
+    <section class="card">
+      <h2>Quick Terminal Reference</h2>
+      <pre>
+# Validação de Túneis e Roteamento
+/interface wireguard peers print stats
+/ppp active print
+/routing ospf neighbor print
+/mpls forwarding-table print</pre>
+    </section>
+
+    <footer>
+      <p>Desenvolvido e mantido para laboratórios práticos de infraestrutura.</p>
+    </footer>
+  </div>
+</body>
+</html>
