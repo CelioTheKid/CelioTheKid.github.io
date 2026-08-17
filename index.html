@@ -3,36 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Célio Assis | NOC & Network Engineering Lab</title>
+  <title>Célio Assis | Infrastructure & Network Operations</title>
   
-  <!-- Mermaid.js para renderização de diagramas de topologia -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
 
   <style>
     :root {
-      --bg: #090d13;
-      --card-bg: rgba(22, 27, 34, 0.85);
-      --border: rgba(48, 54, 61, 0.8);
-      --accent: #58a6ff;
-      --text: #c9d1d9;
-      --heading: #f0f6fc;
-      --terminal-green: #39ff14;
-      --terminal-cyan: #03dac6;
-      --status-up: #2ea043;
-      --insta-gradient: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      --bg-base: #06090e;
+      --panel-bg: rgba(13, 17, 23, 0.72);
+      --panel-border: rgba(48, 54, 61, 0.6);
+      --panel-border-focus: rgba(88, 166, 255, 0.4);
+      --text-main: #e6edf3;
+      --text-muted: #8b949e;
+      --text-dim: #484f58;
+      --accent-blue: #2f81f7;
+      --accent-cyan: #39c5cf;
+      --accent-emerald: #238636;
+      --accent-green: #3fb950;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    
+
     body {
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      line-height: 1.6;
-      padding: 2rem 1rem;
-      position: relative;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      padding: 3rem 1.25rem;
       min-height: 100vh;
+      position: relative;
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
     #bg-canvas {
@@ -46,142 +54,245 @@
     }
 
     .container {
-      max-width: 900px;
+      max-width: 960px;
       margin: 0 auto;
       position: relative;
       z-index: 1;
     }
 
+    /* HEADER */
     header {
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 1.5rem;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 2rem;
       margin-bottom: 2rem;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
 
-    h1 { color: var(--heading); font-size: 1.8rem; margin-bottom: 0.3rem; }
-    .subtitle { color: var(--accent); font-family: monospace; font-size: 0.95rem; }
-    .bio { margin-top: 1rem; font-size: 1rem; color: var(--text); }
-    
-    .links-bar {
-      margin-top: 1.2rem;
+    .profile-meta {
       display: flex;
-      gap: 0.75rem;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    h1 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+
+    .role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--accent-cyan);
+      background: rgba(57, 197, 207, 0.1);
+      border: 1px solid rgba(57, 197, 207, 0.25);
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      margin-top: 0.4rem;
+    }
+
+    .bio {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 720px;
+      line-height: 1.6;
+    }
+
+    .links-bar {
+      margin-top: 1.5rem;
+      display: flex;
+      gap: 0.6rem;
       flex-wrap: wrap;
     }
 
-    .btn-insta {
+    .action-btn {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      background: var(--insta-gradient);
-      color: #fff;
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 600;
-      padding: 0.4rem 0.8rem;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 0.45rem 0.85rem;
       border-radius: 6px;
-      transition: opacity 0.2s ease, transform 0.1s ease;
+      text-decoration: none;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid var(--panel-border);
+      background: rgba(22, 27, 34, 0.8);
+      color: var(--text-main);
     }
-    .btn-insta:hover { opacity: 0.9; transform: translateY(-1px); }
-    .btn-insta svg { width: 16px; height: 16px; fill: currentColor; }
 
-    .btn-wpp {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: #25d366;
-      color: #000;
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 700;
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      transition: opacity 0.2s ease, transform 0.1s ease;
-    }
-    .btn-wpp:hover {
-      opacity: 0.9;
+    .action-btn:hover {
+      border-color: var(--accent-blue);
       transform: translateY(-1px);
+      background: rgba(30, 36, 46, 0.9);
     }
-    .btn-wpp svg {
-      width: 16px;
-      height: 16px;
-      fill: currentColor;
-    }
+
+    .action-btn.instagram:hover { border-color: #e1306c; color: #fff; }
+    .action-btn.whatsapp:hover { border-color: #25d366; color: #fff; }
+
+    .action-btn svg { width: 14px; height: 14px; fill: currentColor; }
+
+    /* CARDS & SECTIONS */
     .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      transition: border-color 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: var(--panel-border-focus);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid var(--panel-border);
+      padding-bottom: 0.6rem;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    /* TELEMETRY / STATUS GRID */
+    .telemetry-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 0.85rem;
+    }
+
+    .telemetry-card {
+      background: rgba(10, 13, 18, 0.6);
+      border: 1px solid var(--panel-border);
+      padding: 1rem;
+      border-radius: 8px;
+    }
+
+    .telemetry-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .telemetry-val {
+      font-size: 1.15rem;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: var(--accent-green);
+      box-shadow: 0 0 10px var(--accent-green);
+      position: relative;
+    }
+
+    .pulse-dot::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      border-radius: 50%;
+      background: inherit;
+      animation: ripple 2s infinite ease-out;
+    }
+
+    @keyframes ripple {
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(3.2); opacity: 0; }
+    }
+
+    /* LAB LOGICAL DIAGRAM */
+    .mermaid-wrapper {
+      background: rgba(6, 9, 14, 0.6);
+      border: 1px solid var(--panel-border);
       border-radius: 8px;
       padding: 1.25rem;
-      margin-bottom: 1.5rem;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      overflow-x: auto;
     }
 
-    .card h2 {
-      color: var(--heading);
-      font-size: 1.2rem;
-      margin-bottom: 0.75rem;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 0.4rem;
+    /* TERMINAL CLI */
+    .cli-box {
+      background: #040608;
+      border: 1px solid var(--panel-border);
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      overflow: hidden;
+    }
+
+    .cli-bar {
+      background: #0d1117;
+      padding: 0.4rem 0.8rem;
+      border-bottom: 1px solid var(--panel-border);
       display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      justify-content: space-between;
+      color: var(--text-muted);
+      font-size: 0.72rem;
     }
 
-    /* Grid de Status */
-    .status-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      margin-top: 0.5rem;
-    }
-    .status-item {
-      background: rgba(13, 17, 23, 0.7);
-      border: 1px solid var(--border);
-      padding: 0.75rem;
-      border-radius: 6px;
-    }
-    .status-label { font-size: 0.8rem; color: #8b949e; }
-    .status-val { font-size: 1rem; font-weight: 600; color: var(--heading); display: flex; align-items: center; gap: 0.4rem; }
-    .indicator { width: 8px; height: 8px; border-radius: 50%; background: var(--status-up); box-shadow: 0 0 8px var(--status-up); }
-
-    .badge {
-      display: inline-block;
-      background: rgba(33, 38, 45, 0.85);
-      color: var(--terminal-cyan);
-      border: 1px solid var(--border);
-      padding: 0.2rem 0.6rem;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      font-family: monospace;
-      margin: 0.2rem 0.2rem 0.2rem 0;
-    }
-
-    /* Terminal CLI */
-    .terminal-box {
-      background: rgba(0, 0, 0, 0.95);
-      border: 1px solid var(--border);
-      border-radius: 6px;
+    .cli-body {
       padding: 1rem;
-      font-family: "Courier New", Courier, monospace;
-      color: var(--terminal-green);
-      min-height: 180px;
-      font-size: 0.85rem;
     }
-    .terminal-output {
+
+    .cli-output {
+      color: #7ee787;
       white-space: pre-wrap;
-      max-height: 220px;
+      max-height: 200px;
       overflow-y: auto;
+      line-height: 1.6;
       margin-bottom: 0.5rem;
     }
-    .terminal-input-line {
+
+    .cli-input-row {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.4rem;
     }
-    .terminal-prompt { color: var(--accent); }
-    .terminal-input {
+
+    .cli-prompt { color: var(--accent-blue); }
+
+    .cli-input {
       background: transparent;
       border: none;
       outline: none;
@@ -191,79 +302,113 @@
       flex-grow: 1;
     }
 
-    /* Subnet Calc */
-    .calc-row {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
-    }
-    .calc-input {
-      background: #0d1117;
-      border: 1px solid var(--border);
-      color: #fff;
-      padding: 0.5rem;
-      border-radius: 4px;
-      outline: none;
-      font-family: monospace;
-      flex-grow: 1;
-    }
-    .calc-btn {
-      background: var(--accent);
-      color: #000;
-      font-weight: 600;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .calc-results {
-      background: #0d1117;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 0.75rem;
-      font-family: monospace;
-      font-size: 0.85rem;
+    /* SUBNET CALCULATOR */
+    .calc-box {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .calc-input-group {
+      display: flex;
       gap: 0.5rem;
     }
 
-    /* Runbooks com Botão Copiar */
-    .runbook-block {
-      position: relative;
-      margin-top: 0.75rem;
+    .calc-input {
+      background: rgba(10, 13, 18, 0.8);
+      border: 1px solid var(--panel-border);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      padding: 0.6rem 0.8rem;
+      border-radius: 6px;
+      flex-grow: 1;
+      outline: none;
     }
-    pre {
-      background: rgba(0, 0, 0, 0.85);
-      color: var(--terminal-green);
+
+    .calc-input:focus { border-color: var(--accent-blue); }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem;
+      background: rgba(6, 9, 14, 0.6);
+      border: 1px solid var(--panel-border);
       padding: 1rem;
       border-radius: 6px;
-      overflow-x: auto;
-      font-size: 0.85rem;
-      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
     }
-    .btn-copy {
+
+    .calc-metric-label { color: var(--text-muted); font-size: 0.7rem; }
+    .calc-metric-val { color: var(--accent-cyan); font-weight: 500; margin-top: 0.15rem; }
+
+    /* RUNBOOKS */
+    .runbook-group {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .runbook-item {
+      position: relative;
+      background: #040608;
+      border: 1px solid var(--panel-border);
+      border-radius: 6px;
+      padding: 0.85rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: #c9d1d9;
+    }
+
+    .runbook-title {
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-main);
+      margin-bottom: 0.4rem;
+    }
+
+    .copy-btn {
       position: absolute;
       top: 8px;
       right: 8px;
-      background: #21262d;
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-size: 0.75rem;
+      background: #161b22;
+      border: 1px solid var(--panel-border);
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
       padding: 0.2rem 0.5rem;
       border-radius: 4px;
       cursor: pointer;
+      transition: all 0.2s;
     }
-    .btn-copy:hover { background: #30363d; }
+
+    .copy-btn:hover { color: #fff; border-color: var(--text-muted); }
+
+    /* BADGES */
+    .badge-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .tech-pill {
+      background: rgba(22, 27, 34, 0.9);
+      border: 1px solid var(--panel-border);
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.25rem 0.55rem;
+      border-radius: 4px;
+    }
 
     footer {
       text-align: center;
-      margin-top: 3rem;
-      font-size: 0.85rem;
-      color: #8b949e;
-      border-top: 1px solid var(--border);
-      padding-top: 1.5rem;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      padding: 2rem 0 1rem;
+      border-top: 1px solid rgba(48, 54, 61, 0.3);
     }
   </style>
 </head>
@@ -271,158 +416,189 @@
   <canvas id="bg-canvas"></canvas>
 
   <div class="container">
+    <!-- HERO / HEADER -->
     <header>
-      <h1>Célio Assis</h1>
-      <p class="subtitle">&gt; Network Technician | NOC & Infrastructure Operations</p>
-      <p class="bio">
-        Documentação de topologias, laboratórios de roteamento avançado, VPNs seguras e infraestrutura de telecomunicações.
-      </p>
-      
-      <div class="links-bar">
-        <a href="https://instagram.com/kidpeaces/" target="_blank" rel="noopener noreferrer" class="btn-insta">
-          <svg viewBox="0 0 24 24">
-            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-          </svg>
-          @kidpeaces
-        </a>
-
-        <a href="https://wa.me/5565984423873" target="_blank" rel="noopener noreferrer" class="btn-wpp">
-          <svg viewBox="0 0 24 24">
-            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-          </svg>
-          WhatsApp
-        </a>
+      <div class="profile-meta">
+        <div>
+          <h1>Célio Assis</h1>
+          <div class="role-badge">NOC &amp; Network Infrastructure Specialist</div>
+        </div>
+        <div class="links-bar" style="margin-top: 0;">
+          <a href="https://instagram.com/kidpeaces/" target="_blank" rel="noopener noreferrer" class="action-btn instagram">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            @kidpeaces
+          </a>
+          <a href="https://wa.me/5565984423873" target="_blank" rel="noopener noreferrer" class="action-btn whatsapp">
+            <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+            WhatsApp Direct
+          </a>
+        </div>
       </div>
+      <p class="bio">
+        Projetos de engenharia e contingência de borda, túneis criptografados de alta disponibilidade, roteamento dinâmico (OSPF/BGP) e convergência de transporte L2/L3 para operadoras e provedores de internet.
+      </p>
     </header>
 
-    <!-- 1. LIVE STATUS DASHBOARD -->
+    <!-- LIVE TELEMETRY -->
     <section class="card">
-      <h2>Lab Live Status</h2>
-      <div class="status-grid">
-        <div class="status-item">
-          <div class="status-label">WireGuard Gateway</div>
-          <div class="status-val"><div class="indicator"></div> 10.20.20.1 (UP)</div>
+      <div class="card-header">
+        <span class="card-title">Telemetria &amp; Estado Operacional</span>
+        <span class="card-tag">Monitoramento Ativo</span>
+      </div>
+      <div class="telemetry-grid">
+        <div class="telemetry-card">
+          <div class="telemetry-header"><span>WIREGUARD VPN</span><span>UDP 51820</span></div>
+          <div class="telemetry-val"><div class="pulse-dot"></div> ACTIVE</div>
         </div>
-        <div class="status-item">
-          <div class="status-label">L2TP/IPsec Peer (Mateus)</div>
-          <div class="status-val"><div class="indicator"></div> 10.10.10.48 (ESTABLISHED)</div>
+        <div class="telemetry-card">
+          <div class="telemetry-header"><span>L2TP / IPSEC PEER</span><span>DYNAMIC</span></div>
+          <div class="telemetry-val"><div class="pulse-dot"></div> ESTABLISHED</div>
         </div>
-        <div class="status-item">
-          <div class="status-label">IGP Core (OSPF Area 0)</div>
-          <div class="status-val"><div class="indicator"></div> CONVERGED</div>
+        <div class="telemetry-card">
+          <div class="telemetry-header"><span>IGP ROUTING (OSPF)</span><span>AREA 0</span></div>
+          <div class="telemetry-val"><div class="pulse-dot"></div> CONVERGED</div>
+        </div>
+        <div class="telemetry-card">
+          <div class="telemetry-header"><span>SYS ARCHITECTURE</span><span>RB493 / v7</span></div>
+          <div class="telemetry-val" style="color: var(--accent-cyan);">ROUTEROS v7.6</div>
         </div>
       </div>
     </section>
 
-    <!-- 2. DIAGRAMA DE TOPOLOGIA -->
+    <!-- TOPOLOGY MERMAID -->
     <section class="card">
-      <h2>Topologia de Transporte & Gerência</h2>
-      <div class="mermaid">
+      <div class="card-header">
+        <span class="card-title">Arquitetura de Transporte &amp; Gerência Segura</span>
+        <span class="card-tag">Layer 2 / Layer 3 Overlay</span>
+      </div>
+      <div class="mermaid-wrapper">
+        <div class="mermaid">
 graph LR
-    subgraph WAN_Access [Acesso Remoto]
-        MOBILE[📱 Celular WireGuard<br>10.20.20.2]
-        MATEUS[🏢 RB Mateus L2TP<br>10.10.10.48]
+    subgraph OVERLAY_VPN [Camada de Acesso Operacional]
+        MOBILE["📱 Smartphone Client<br>10.20.20.2 (WireGuard)"]
+        REMOTE_RB["🏢 Remote Node (Mateus)<br>10.10.10.48 (L2TP/IPsec)"]
     end
 
-    subgraph CORE_ISP [Core Lab MikroTik RB493]
-        CORE[⚡ Borda / BRAS<br>10.255.255.1]
+    subgraph CORE_INFRA [Core de Roteamento & BRAS]
+        ROUTER["⚡ MikroTik Core Gateway<br>LSR-ID: 10.255.255.1"]
     end
 
-    subgraph ACCESS_GPON [Agregação & Acesso]
-        OLT[🔌 OLT ZTE GPON]
-        CLI[🏠 Clientes FTTH]
+    subgraph ACCESS_GPON [Agregação & Acesso Óptico]
+        OLT["🔌 OLT ZTE GPON / Switch"]
+        FTTH["🏠 Redes FTTH / Clientes"]
     end
 
-    MOBILE -->|UDP 51820| CORE
-    MATEUS -->|IPsec Tunnel| CORE
-    CORE ===|VPLS / MPLS L2| OLT
-    OLT --- CLI
-      </div>
-    </section>
-
-    <!-- 3. TERMINAL CLI INTERATIVO -->
-    <section class="card">
-      <h2>NOC Interactive CLI</h2>
-      <div class="terminal-box">
-        <div class="terminal-output" id="term-out">NOC Console v7.6 Initialized.
-Type 'help' to list available network diagnostics commands.</div>
-        <div class="terminal-input-line">
-          <span class="terminal-prompt">[admin@noc-lab]$</span>
-          <input type="text" id="term-in" class="terminal-input" autofocus autocomplete="off" spellcheck="false">
+    MOBILE -->|Túnel Criptografado ChaCha20| ROUTER
+    REMOTE_RB -->|IKEv1 AES-CBC Phase 2| ROUTER
+    ROUTER ===|VPLS / MPLS L2 Pseudowire| OLT
+    OLT --- FTTH
         </div>
       </div>
     </section>
 
-    <!-- 4. CALCULADORA DE SUB-REDE -->
+    <!-- INTERACTIVE CLI -->
     <section class="card">
-      <h2>Calculadora de Sub-rede / CIDR</h2>
-      <div class="calc-row">
-        <input type="text" id="calc-ip" class="calc-input" placeholder="Ex: 10.255.0.1/30 ou 192.168.100.0/24">
-        <button class="calc-btn" onclick="calculateSubnet()">Calcular</button>
+      <div class="card-header">
+        <span class="card-title">Console de Diagnóstico Interativo</span>
+        <span class="card-tag">CLI v7.6</span>
       </div>
-      <div class="calc-results" id="calc-out">
-        <div><strong>Rede:</strong> <span id="res-net">-</span></div>
-        <div><strong>Máscara:</strong> <span id="res-mask">-</span></div>
-        <div><strong>Wildcard:</strong> <span id="res-wild">-</span></div>
-        <div><strong>Primeiro Host:</strong> <span id="res-first">-</span></div>
-        <div><strong>Último Host:</strong> <span id="res-last">-</span></div>
-        <div><strong>Broadcast:</strong> <span id="res-bcast">-</span></div>
+      <div class="cli-box">
+        <div class="cli-bar">
+          <span>Terminal de Sessão: ttyS0</span>
+          <span>Buffer: 100% OK</span>
+        </div>
+        <div class="cli-body">
+          <div class="cli-output" id="cli-out">MikroTik RouterOS 7.6 (CLI Emulator)
+Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
+          <div class="cli-input-row">
+            <span class="cli-prompt">[admin@noc-core]&gt;</span>
+            <input type="text" id="cli-in" class="cli-input" autocomplete="off" spellcheck="false">
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- 5. STACK TÉCNICA -->
+    <!-- SUBNET CALCULATOR -->
     <section class="card">
-      <h2>Tecnologias & Protocolos Validados</h2>
-      <span class="badge">MikroTik RouterOS v7</span>
-      <span class="badge">WireGuard VPN</span>
-      <span class="badge">L2TP / IPsec</span>
-      <span class="badge">OSPF v2/v3</span>
-      <span class="badge">MPLS / LDP</span>
-      <span class="badge">VPLS L2VPN</span>
-      <span class="badge">FTTx / GPON ZTE</span>
+      <div class="card-header">
+        <span class="card-title">Calculadora de Sub-rede &amp; Máscaras CIDR</span>
+        <span class="card-tag">Ferramenta Rápida</span>
+      </div>
+      <div class="calc-box">
+        <div class="calc-input-group">
+          <input type="text" id="calc-input" class="calc-input" placeholder="Ex: 10.255.0.1/30 ou 192.168.100.0/24" value="10.255.0.1/30">
+        </div>
+        <div class="calc-grid">
+          <div><div class="calc-metric-label">REDE BASE</div><div class="calc-metric-val" id="res-net">10.255.0.0/30</div></div>
+          <div><div class="calc-metric-label">MÁSCARA DECIMAL</div><div class="calc-metric-val" id="res-mask">255.255.255.252</div></div>
+          <div><div class="calc-metric-label">WILDCARD (OSPF/ACL)</div><div class="calc-metric-val" id="res-wild">0.0.0.3</div></div>
+          <div><div class="calc-metric-label">PRIMEIRO HOST</div><div class="calc-metric-val" id="res-first">10.255.0.1</div></div>
+          <div><div class="calc-metric-label">ÚLTIMO HOST</div><div class="calc-metric-val" id="res-last">10.255.0.2</div></div>
+          <div><div class="calc-metric-label">BROADCAST</div><div class="calc-metric-val" id="res-bcast">10.255.0.3</div></div>
+        </div>
+      </div>
     </section>
 
-    <!-- 6. RUNBOOKS DE RESGATE NOC -->
+    <!-- RUNBOOKS -->
     <section class="card">
-      <h2>NOC Quick Runbooks</h2>
-      
-      <p><strong>1. Reset Rápido de Tabela ARP e Flushing de DNS</strong></p>
-      <div class="runbook-block">
-        <button class="btn-copy" onclick="copyCode('code1')">Copiar</button>
-        <pre id="code1">/ip arp remove [find dynamic=yes]
-/ip dns cache flush</pre>
+      <div class="card-header">
+        <span class="card-title">Runbooks &amp; Procedimentos Rápidos de Campo</span>
+        <span class="card-tag">Scripts Operacionais</span>
       </div>
+      <div class="runbook-group">
+        <div class="runbook-item">
+          <div class="runbook-title">1. Flush de Tabela ARP &amp; Cache DNS</div>
+          <button class="copy-btn" onclick="copySnippet('cmd-flush')">Copiar</button>
+          <code id="cmd-flush">/ip arp remove [find dynamic=yes]; /ip dns cache flush</code>
+        </div>
+        <div class="runbook-item">
+          <div class="runbook-title">2. Inspecionar Tráfego e Peers WireGuard</div>
+          <button class="copy-btn" onclick="copySnippet('cmd-wg')">Copiar</button>
+          <code id="cmd-wg">/interface wireguard peers print stats; /ppp active print</code>
+        </div>
+      </div>
+    </section>
 
-      <p style="margin-top: 1rem;"><strong>2. Monitoramento de Sessões L2TP e WireGuard</strong></p>
-      <div class="runbook-block">
-        <button class="btn-copy" onclick="copyCode('code2')">Copiar</button>
-        <pre id="code2">/interface wireguard peers print stats
-/ppp active print</pre>
+    <!-- STACK -->
+    <section class="card">
+      <div class="card-header">
+        <span class="card-title">Competências &amp; Tecnologias</span>
+        <span class="card-tag">Stack Técnica</span>
+      </div>
+      <div class="badge-wrap">
+        <span class="tech-pill">MikroTik RouterOS v7</span>
+        <span class="tech-pill">WireGuard Protocol</span>
+        <span class="tech-pill">L2TP / IPsec Suite</span>
+        <span class="tech-pill">OSPF Multi-Area</span>
+        <span class="tech-pill">MPLS / LDP Transport</span>
+        <span class="tech-pill">VPLS Layer 2 VPN</span>
+        <span class="tech-pill">FTTH / GPON ZTE &amp; Huawei</span>
+        <span class="tech-pill">BGP Peering &amp; Transit</span>
       </div>
     </section>
 
     <footer>
-      <p>Desenvolvido e mantido por Célio Assis | Operações e Laboratórios de Rede.</p>
+      <span>LAB OPS PORTAL &bull; DESIGNED FOR HIGH AVAILABILITY &bull; CÉLIO ASSIS</span>
     </footer>
   </div>
 
-  <!-- SCRIPTS FUNCIONAIS -->
   <script>
-    /* 1. ANIMAÇÃO DE FUNDO CANVAS MESH */
+    /* 1. BACKGROUND ELEGANTE & MADURO (TRAFFIC MESH EM VELOCIDADE SUAVE) */
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
     let width = canvas.width = window.innerWidth;
     let height = canvas.height = window.innerHeight;
-    let particles = [];
-    const particleCount = Math.min(Math.floor((width * height) / 14000), 75);
 
-    class Particle {
+    let nodes = [];
+    const totalNodes = Math.min(Math.floor((width * height) / 22000), 45);
+
+    class NetworkNode {
       constructor() {
         this.x = Math.random() * width;
         this.y = Math.random() * height;
-        this.vx = (Math.random() - 0.5) * 0.6;
-        this.vy = (Math.random() - 0.5) * 0.6;
-        this.radius = Math.random() * 1.5 + 1;
+        this.vx = (Math.random() - 0.5) * 0.35;
+        this.vy = (Math.random() - 0.5) * 0.35;
+        this.radius = Math.random() * 1.2 + 0.8;
       }
       update() {
         this.x += this.vx;
@@ -433,107 +609,115 @@ Type 'help' to list available network diagnostics commands.</div>
       draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = '#58a6ff';
+        ctx.fillStyle = 'rgba(47, 129, 247, 0.4)';
         ctx.fill();
       }
     }
-    for (let i = 0; i < particleCount; i++) particles.push(new Particle());
 
-    function animate() {
+    for (let i = 0; i < totalNodes; i++) nodes.push(new NetworkNode());
+
+    let packetProgress = 0;
+    function render() {
       ctx.clearRect(0, 0, width, height);
-      for (let i = 0; i < particles.length; i++) {
-        particles[i].update();
-        particles[i].draw();
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
+
+      for (let i = 0; i < nodes.length; i++) {
+        nodes[i].update();
+        nodes[i].draw();
+
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 120) {
+
+          if (dist < 160) {
             ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(88, 166, 255, ${0.18 * (1 - dist / 120)})`;
-            ctx.lineWidth = 0.8;
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.strokeStyle = `rgba(47, 129, 247, ${0.12 * (1 - dist / 160)})`;
+            ctx.lineWidth = 0.6;
             ctx.stroke();
           }
         }
       }
-      requestAnimationFrame(animate);
+      requestAnimationFrame(render);
     }
+    render();
+
     window.addEventListener('resize', () => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
     });
-    animate();
 
-    /* 2. TERMINAL CLI */
-    const termIn = document.getElementById('term-in');
-    const termOut = document.getElementById('term-out');
+    /* 2. TERMINAL CLI DINÂMICO */
+    const cliIn = document.getElementById('cli-in');
+    const cliOut = document.getElementById('cli-out');
 
-    termIn.addEventListener('keydown', function(e) {
+    cliIn.addEventListener('keydown', function(e) {
       if (e.key === 'Enter') {
         const cmd = this.value.trim().toLowerCase();
-        let resp = '';
+        let out = '';
 
         if (cmd === 'help') {
-          resp = "Available commands:\n  help        - Show this menu\n  ping <ip>   - Test latency to remote node\n  show ospf   - View OSPF IGP state\n  status vpn  - Inspect active WireGuard and L2TP tunnels\n  clear       - Clear screen";
+          out = "Comandos disponíveis:\n  help        - Lista de comandos\n  ping <ip>   - Diagnóstico ICMP com cálculo de RTT\n  show ospf   - Estado de adjacência IGP\n  status vpn  - Túneis e interfaces virtuais ativas\n  clear       - Limpar console";
         } else if (cmd.startsWith('ping')) {
-          const target = cmd.split(' ')[1] || '8.8.8.8';
-          resp = `PING ${target} 56(84) bytes of data.\n64 bytes from ${target}: icmp_seq=1 ttl=118 time=48.2 ms\n64 bytes from ${target}: icmp_seq=2 ttl=118 time=47.9 ms\n--- ${target} ping statistics ---\n2 packets transmitted, 2 received, 0% packet loss`;
+          const host = cmd.split(' ')[1] || '8.8.8.8';
+          out = `HOST ${host} ICMP ECHO:\n  seq=1 ttl=118 rtt=47.2ms size=56B status=REPLY\n  seq=2 ttl=118 rtt=48.1ms size=56B status=REPLY\n-- Packet Loss: 0.0% | Jitter: 0.9ms --`;
         } else if (cmd === 'show ospf') {
-          resp = "OSPF Instance: ospf-core | Area: 0.0.0.0 (Backbone)\nNeighbor ID      Priority   State          Dead Time   Address\n10.255.255.2     1          Full/Backup    00:00:34    10.10.10.48";
+          out = "OSPFv2 Instance 'core-isp' Area 0.0.0.0 (Backbone):\n  Neighbor 10.255.255.2 -> State: FULL / DR | Int: ether2 | Dead: 32s\n  Routes: 10.255.0.0/32 [110/2] via 10.10.10.48";
         } else if (cmd === 'status vpn') {
-          resp = "[WIREGUARD] wg-lab (Port 51820): Active (Peer: Celular S24+)\n[L2TP/IPSEC]  mateus -> 10.10.10.48 (State: ESTABLISHED | Uptime: OK)";
+          out = "[WIREGUARD]   wg-lab (Port 51820 UDP) -> Status: UP | Allowed-IP: 10.20.20.2/32\n[L2TP/IPSEC]   peer-mateus -> Status: ESTABLISHED (Enc: AES-256 / SHA-256)";
         } else if (cmd === 'clear') {
-          termOut.innerText = '';
+          cliOut.innerText = '';
           this.value = '';
           return;
         } else if (cmd === '') {
-          resp = '';
+          out = '';
         } else {
-          resp = `bad command: '${cmd}'. Type 'help' for reference.`;
+          out = `Erro: comando '${cmd}' não reconhecido. Digite 'help'.`;
         }
 
-        termOut.innerText += `\n[admin@noc-lab]$ ${this.value}\n${resp}`;
+        cliOut.innerText += `\n[admin@noc-core]> ${this.value}\n${out}`;
         this.value = '';
-        termOut.scrollTop = termOut.scrollHeight;
+        cliOut.scrollTop = cliOut.scrollHeight;
       }
     });
 
-    /* 3. CALCULADORA CIDR */
+    /* 3. CALCULADORA CIDR EM TEMPO REAL */
+    const calcInput = document.getElementById('calc-input');
     function ipToInt(ip) {
       return ip.split('.').reduce((acc, oct) => (acc << 8) + parseInt(oct, 10), 0) >>> 0;
     }
     function intToIp(int) {
       return [(int >>> 24) & 255, (int >>> 16) & 255, (int >>> 8) & 255, int & 255].join('.');
     }
-    function calculateSubnet() {
-      const val = document.getElementById('calc-ip').value.trim();
-      if (!val.includes('/')) return alert('Insira no formato IP/CIDR (ex: 10.255.0.1/30)');
+    function updateCalc() {
+      const val = calcInput.value.trim();
+      if (!val.includes('/')) return;
       const [ipStr, cidrStr] = val.split('/');
       const cidr = parseInt(cidrStr, 10);
-      if (cidr < 0 || cidr > 32) return alert('CIDR inválido (0-32)');
+      if (isNaN(cidr) || cidr < 0 || cidr > 32) return;
 
-      const ip = ipToInt(ipStr);
-      const mask = cidr === 0 ? 0 : (~0 << (32 - cidr)) >>> 0;
-      const wildcard = ~mask >>> 0;
-      const net = (ip & mask) >>> 0;
-      const bcast = (net | wildcard) >>> 0;
+      try {
+        const ip = ipToInt(ipStr);
+        const mask = cidr === 0 ? 0 : (~0 << (32 - cidr)) >>> 0;
+        const wildcard = ~mask >>> 0;
+        const net = (ip & mask) >>> 0;
+        const bcast = (net | wildcard) >>> 0;
 
-      document.getElementById('res-net').innerText = intToIp(net) + '/' + cidr;
-      document.getElementById('res-mask').innerText = intToIp(mask);
-      document.getElementById('res-wild').innerText = intToIp(wildcard);
-      document.getElementById('res-first').innerText = cidr >= 31 ? intToIp(net) : intToIp(net + 1);
-      document.getElementById('res-last').innerText = cidr >= 31 ? intToIp(bcast) : intToIp(bcast - 1);
-      document.getElementById('res-bcast').innerText = intToIp(bcast);
+        document.getElementById('res-net').innerText = intToIp(net) + '/' + cidr;
+        document.getElementById('res-mask').innerText = intToIp(mask);
+        document.getElementById('res-wild').innerText = intToIp(wildcard);
+        document.getElementById('res-first').innerText = cidr >= 31 ? intToIp(net) : intToIp(net + 1);
+        document.getElementById('res-last').innerText = cidr >= 31 ? intToIp(bcast) : intToIp(bcast - 1);
+        document.getElementById('res-bcast').innerText = intToIp(bcast);
+      } catch (e) {}
     }
+    calcInput.addEventListener('input', updateCalc);
 
-    /* 4. COPIAR CÓDIGO */
-    function copyCode(id) {
+    /* 4. COPIAR SNIPPET */
+    function copySnippet(id) {
       const text = document.getElementById(id).innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        alert('Comando copiado para a área de transferência!');
-      });
+      navigator.clipboard.writeText(text);
     }
   </script>
 </body>
