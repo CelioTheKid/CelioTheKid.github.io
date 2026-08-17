@@ -14,17 +14,18 @@
 
   <style>
     :root {
-      --bg-base: #06090e;
-      --panel-bg: rgba(13, 17, 23, 0.72);
-      --panel-border: rgba(48, 54, 61, 0.6);
-      --panel-border-focus: rgba(88, 166, 255, 0.4);
+      --bg-base: #080b10;
+      --panel-bg: rgba(13, 17, 23, 0.85);
+      --panel-border: rgba(48, 54, 61, 0.7);
+      --panel-border-focus: rgba(88, 166, 255, 0.5);
       --text-main: #e6edf3;
       --text-muted: #8b949e;
       --text-dim: #484f58;
       --accent-blue: #2f81f7;
       --accent-cyan: #39c5cf;
-      --accent-emerald: #238636;
       --accent-green: #3fb950;
+      --accent-orange: #d29922;
+      --accent-red: #f85149;
       --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
@@ -33,31 +34,21 @@
 
     body {
       background-color: var(--bg-base);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(47, 129, 247, 0.08) 0%, transparent 60%),
+        radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 100% 100%, 24px 24px;
+      background-attachment: fixed;
       color: var(--text-main);
       font-family: var(--font-sans);
       line-height: 1.5;
       padding: 3rem 1.25rem;
       min-height: 100vh;
-      position: relative;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    #bg-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -1;
-      pointer-events: none;
     }
 
     .container {
       max-width: 960px;
       margin: 0 auto;
-      position: relative;
-      z-index: 1;
     }
 
     /* HEADER */
@@ -66,7 +57,7 @@
       border: 1px solid var(--panel-border);
       border-radius: 12px;
       padding: 2rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       backdrop-filter: blur(16px);
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
@@ -104,12 +95,11 @@
       margin-top: 1rem;
       font-size: 0.95rem;
       color: var(--text-muted);
-      max-width: 720px;
+      max-width: 760px;
       line-height: 1.6;
     }
 
     .links-bar {
-      margin-top: 1.5rem;
       display: flex;
       gap: 0.6rem;
       flex-wrap: wrap;
@@ -138,10 +128,9 @@
 
     .action-btn.instagram:hover { border-color: #e1306c; color: #fff; }
     .action-btn.whatsapp:hover { border-color: #25d366; color: #fff; }
-
     .action-btn svg { width: 14px; height: 14px; fill: currentColor; }
 
-    /* CARDS & SECTIONS */
+    /* CARDS */
     .card {
       background: var(--panel-bg);
       border: 1px solid var(--panel-border);
@@ -150,11 +139,6 @@
       margin-bottom: 1.5rem;
       backdrop-filter: blur(16px);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-      transition: border-color 0.2s ease;
-    }
-
-    .card:hover {
-      border-color: var(--panel-border-focus);
     }
 
     .card-header {
@@ -169,11 +153,7 @@
     .card-title {
       font-size: 1rem;
       font-weight: 600;
-      letter-spacing: -0.01em;
       color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
     }
 
     .card-tag {
@@ -183,7 +163,7 @@
       text-transform: uppercase;
     }
 
-    /* TELEMETRY / STATUS GRID */
+    /* TELEMETRIA */
     .telemetry-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -222,27 +202,9 @@
       border-radius: 50%;
       background-color: var(--accent-green);
       box-shadow: 0 0 10px var(--accent-green);
-      position: relative;
     }
 
-    .pulse-dot::after {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      border-radius: 50%;
-      background: inherit;
-      animation: ripple 2s infinite ease-out;
-    }
-
-    @keyframes ripple {
-      0% { transform: scale(1); opacity: 0.8; }
-      100% { transform: scale(3.2); opacity: 0; }
-    }
-
-    /* LAB LOGICAL DIAGRAM */
+    /* DIAGRAMA */
     .mermaid-wrapper {
       background: rgba(6, 9, 14, 0.6);
       border: 1px solid var(--panel-border);
@@ -251,7 +213,7 @@
       overflow-x: auto;
     }
 
-    /* TERMINAL CLI */
+    /* CLI */
     .cli-box {
       background: #040608;
       border: 1px solid var(--panel-border);
@@ -271,27 +233,18 @@
       font-size: 0.72rem;
     }
 
-    .cli-body {
-      padding: 1rem;
-    }
-
+    .cli-body { padding: 1rem; }
     .cli-output {
       color: #7ee787;
       white-space: pre-wrap;
-      max-height: 200px;
+      max-height: 180px;
       overflow-y: auto;
       line-height: 1.6;
       margin-bottom: 0.5rem;
     }
 
-    .cli-input-row {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
+    .cli-input-row { display: flex; align-items: center; gap: 0.4rem; }
     .cli-prompt { color: var(--accent-blue); }
-
     .cli-input {
       background: transparent;
       border: none;
@@ -302,35 +255,46 @@
       flex-grow: 1;
     }
 
-    /* SUBNET CALCULATOR */
-    .calc-box {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1rem;
-    }
-
-    .calc-input-group {
+    /* INPUTS & UTILS */
+    .form-row {
       display: flex;
       gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
     }
 
-    .calc-input {
+    .tech-input, .tech-select {
       background: rgba(10, 13, 18, 0.8);
       border: 1px solid var(--panel-border);
       color: #fff;
       font-family: var(--font-mono);
-      font-size: 0.85rem;
-      padding: 0.6rem 0.8rem;
+      font-size: 0.82rem;
+      padding: 0.55rem 0.75rem;
       border-radius: 6px;
-      flex-grow: 1;
       outline: none;
+      flex: 1;
+      min-width: 160px;
     }
 
-    .calc-input:focus { border-color: var(--accent-blue); }
+    .tech-input:focus, .tech-select:focus { border-color: var(--accent-blue); }
 
-    .calc-grid {
+    .tech-btn {
+      background: var(--accent-blue);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 600;
+      border: none;
+      padding: 0.55rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .tech-btn:hover { background: #1f6feb; }
+
+    .result-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
       gap: 0.75rem;
       background: rgba(6, 9, 14, 0.6);
       border: 1px solid var(--panel-border);
@@ -340,32 +304,24 @@
       font-size: 0.78rem;
     }
 
-    .calc-metric-label { color: var(--text-muted); font-size: 0.7rem; }
-    .calc-metric-val { color: var(--accent-cyan); font-weight: 500; margin-top: 0.15rem; }
+    .metric-label { color: var(--text-muted); font-size: 0.7rem; }
+    .metric-val { color: var(--accent-cyan); font-weight: 500; margin-top: 0.15rem; }
 
-    /* RUNBOOKS */
-    .runbook-group {
-      display: grid;
-      gap: 1rem;
+    /* CODE BLOCKS */
+    .code-block-wrap {
+      position: relative;
+      margin-top: 0.75rem;
     }
 
-    .runbook-item {
-      position: relative;
+    pre {
       background: #040608;
-      border: 1px solid var(--panel-border);
+      color: #c9d1d9;
+      padding: 1rem;
       border-radius: 6px;
-      padding: 0.85rem 1rem;
+      overflow-x: auto;
       font-family: var(--font-mono);
       font-size: 0.8rem;
-      color: #c9d1d9;
-    }
-
-    .runbook-title {
-      font-family: var(--font-sans);
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: var(--text-main);
-      margin-bottom: 0.4rem;
+      border: 1px solid var(--panel-border);
     }
 
     .copy-btn {
@@ -385,13 +341,8 @@
 
     .copy-btn:hover { color: #fff; border-color: var(--text-muted); }
 
-    /* BADGES */
-    .badge-wrap {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
-
+    /* PILLS */
+    .badge-wrap { display: flex; flex-wrap: wrap; gap: 0.4rem; }
     .tech-pill {
       background: rgba(22, 27, 34, 0.9);
       border: 1px solid var(--panel-border);
@@ -404,26 +355,24 @@
 
     footer {
       text-align: center;
-      font-size: 0.78rem;
-      color: var(--text-dim);
+      font-size: 0.8rem;
+      color: var(--text-muted);
       font-family: var(--font-mono);
-      padding: 2rem 0 1rem;
+      padding: 2.5rem 0 1rem;
       border-top: 1px solid rgba(48, 54, 61, 0.3);
     }
   </style>
 </head>
 <body>
-  <canvas id="bg-canvas"></canvas>
-
   <div class="container">
-    <!-- HERO / HEADER -->
+    <!-- HEADER -->
     <header>
       <div class="profile-meta">
         <div>
           <h1>Célio Assis</h1>
           <div class="role-badge">NOC &amp; Network Infrastructure Specialist</div>
         </div>
-        <div class="links-bar" style="margin-top: 0;">
+        <div class="links-bar">
           <a href="https://instagram.com/kidpeaces/" target="_blank" rel="noopener noreferrer" class="action-btn instagram">
             <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
             @kidpeaces
@@ -462,6 +411,71 @@
           <div class="telemetry-header"><span>SYS ARCHITECTURE</span><span>RB493 / v7</span></div>
           <div class="telemetry-val" style="color: var(--accent-cyan);">ROUTEROS v7.6</div>
         </div>
+      </div>
+    </section>
+
+    <!-- CALCULADORA DE ATENUAÇÃO ÓPTICA GPON -->
+    <section class="card">
+      <div class="card-header">
+        <span class="card-title">Calculadora de Potência Óptica GPON (Link Loss Budget)</span>
+        <span class="card-tag">Engenharia FTTH</span>
+      </div>
+      <div class="form-row">
+        <input type="number" id="gpon-tx" class="tech-input" placeholder="Potência OLT (ex: +4 dBm)" value="4" step="0.5">
+        <input type="number" id="gpon-km" class="tech-input" placeholder="Distância Fibra (km)" value="8" step="0.5">
+        <select id="gpon-split1" class="tech-select">
+          <option value="3.5">Splitter Primário 1:2 (~3.5 dB)</option>
+          <option value="7.2">Splitter Primário 1:4 (~7.2 dB)</option>
+          <option value="10.5" selected>Splitter Primário 1:8 (~10.5 dB)</option>
+          <option value="13.8">Splitter Primário 1:16 (~13.8 dB)</option>
+        </select>
+        <select id="gpon-split2" class="tech-select">
+          <option value="0">Sem Splitter Secundário</option>
+          <option value="10.5" selected>Splitter Secundário 1:8 (~10.5 dB)</option>
+          <option value="13.8">Splitter Secundário 1:16 (~13.8 dB)</option>
+        </select>
+      </div>
+      <div class="result-grid">
+        <div><div class="metric-label">ATENUAÇÃO FIBRA (0.35 dB/km)</div><div class="metric-val" id="gpon-loss-fiber">-</div></div>
+        <div><div class="metric-label">PERDA SPLITTERS (TEÓRICA)</div><div class="metric-val" id="gpon-loss-splitters">-</div></div>
+        <div><div class="metric-label">POTÊNCIA ESTIMADA NA ONU</div><div class="metric-val" id="gpon-rx-final">-</div></div>
+        <div><div class="metric-label">STATUS DO LINK</div><div class="metric-val" id="gpon-status">-</div></div>
+      </div>
+    </section>
+
+    <!-- GERADOR DE SCRIPT ROUTEROS -->
+    <section class="card">
+      <div class="card-header">
+        <span class="card-title">Gerador Rápido de Configuração MikroTik (OSPF + MPLS PTP)</span>
+        <span class="card-tag">Automação de Borda</span>
+      </div>
+      <div class="form-row">
+        <input type="text" id="gen-int" class="tech-input" placeholder="Interface (ex: ether2)" value="ether2">
+        <input type="text" id="gen-ip" class="tech-input" placeholder="IP/Masc PTP (ex: 10.100.1.1/30)" value="10.100.1.1/30">
+        <input type="text" id="gen-loopback" class="tech-input" placeholder="Loopback/Router-ID (ex: 10.255.0.1)" value="10.255.0.1">
+      </div>
+      <div class="code-block-wrap">
+        <button class="copy-btn" onclick="copySnippet('gen-code')">Copiar Script</button>
+        <pre id="gen-code"># Gerando script...</pre>
+      </div>
+    </section>
+
+    <!-- SUBNET CALCULATOR -->
+    <section class="card">
+      <div class="card-header">
+        <span class="card-title">Calculadora de Sub-rede &amp; Máscaras CIDR</span>
+        <span class="card-tag">Roteamento IP</span>
+      </div>
+      <div class="form-row">
+        <input type="text" id="calc-input" class="tech-input" placeholder="Ex: 10.255.0.1/30 ou 192.168.100.0/24" value="10.255.0.1/30">
+      </div>
+      <div class="result-grid">
+        <div><div class="metric-label">REDE BASE</div><div class="metric-val" id="res-net">10.255.0.0/30</div></div>
+        <div><div class="metric-label">MÁSCARA DECIMAL</div><div class="metric-val" id="res-mask">255.255.255.252</div></div>
+        <div><div class="metric-label">WILDCARD (OSPF/ACL)</div><div class="metric-val" id="res-wild">0.0.0.3</div></div>
+        <div><div class="metric-label">PRIMEIRO HOST</div><div class="metric-val" id="res-first">10.255.0.1</div></div>
+        <div><div class="metric-label">ÚLTIMO HOST</div><div class="metric-val" id="res-last">10.255.0.2</div></div>
+        <div><div class="metric-label">BROADCAST</div><div class="metric-val" id="res-bcast">10.255.0.3</div></div>
       </div>
     </section>
 
@@ -518,43 +532,24 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
       </div>
     </section>
 
-    <!-- SUBNET CALCULATOR -->
-    <section class="card">
-      <div class="card-header">
-        <span class="card-title">Calculadora de Sub-rede &amp; Máscaras CIDR</span>
-        <span class="card-tag">Ferramenta Rápida</span>
-      </div>
-      <div class="calc-box">
-        <div class="calc-input-group">
-          <input type="text" id="calc-input" class="calc-input" placeholder="Ex: 10.255.0.1/30 ou 192.168.100.0/24" value="10.255.0.1/30">
-        </div>
-        <div class="calc-grid">
-          <div><div class="calc-metric-label">REDE BASE</div><div class="calc-metric-val" id="res-net">10.255.0.0/30</div></div>
-          <div><div class="calc-metric-label">MÁSCARA DECIMAL</div><div class="calc-metric-val" id="res-mask">255.255.255.252</div></div>
-          <div><div class="calc-metric-label">WILDCARD (OSPF/ACL)</div><div class="calc-metric-val" id="res-wild">0.0.0.3</div></div>
-          <div><div class="calc-metric-label">PRIMEIRO HOST</div><div class="calc-metric-val" id="res-first">10.255.0.1</div></div>
-          <div><div class="calc-metric-label">ÚLTIMO HOST</div><div class="calc-metric-val" id="res-last">10.255.0.2</div></div>
-          <div><div class="calc-metric-label">BROADCAST</div><div class="calc-metric-val" id="res-bcast">10.255.0.3</div></div>
-        </div>
-      </div>
-    </section>
-
     <!-- RUNBOOKS -->
     <section class="card">
       <div class="card-header">
         <span class="card-title">Runbooks &amp; Procedimentos Rápidos de Campo</span>
-        <span class="card-tag">Scripts Operacionais</span>
+        <span class="card-tag">Operações de NOC</span>
       </div>
-      <div class="runbook-group">
-        <div class="runbook-item">
-          <div class="runbook-title">1. Flush de Tabela ARP &amp; Cache DNS</div>
+      <div style="display: grid; gap: 1rem;">
+        <div class="code-block-wrap">
+          <div style="font-size: 0.85rem; margin-bottom: 0.4rem; font-weight: 500;">1. Flush de Tabela ARP &amp; Cache DNS</div>
           <button class="copy-btn" onclick="copySnippet('cmd-flush')">Copiar</button>
-          <code id="cmd-flush">/ip arp remove [find dynamic=yes]; /ip dns cache flush</code>
+          <pre id="cmd-flush">/ip arp remove [find dynamic=yes]
+/ip dns cache flush</pre>
         </div>
-        <div class="runbook-item">
-          <div class="runbook-title">2. Inspecionar Tráfego e Peers WireGuard</div>
+        <div class="code-block-wrap">
+          <div style="font-size: 0.85rem; margin-bottom: 0.4rem; font-weight: 500;">2. Inspecionar Tráfego e Peers WireGuard</div>
           <button class="copy-btn" onclick="copySnippet('cmd-wg')">Copiar</button>
-          <code id="cmd-wg">/interface wireguard peers print stats; /ppp active print</code>
+          <pre id="cmd-wg">/interface wireguard peers print stats
+/ppp active print</pre>
         </div>
       </div>
     </section>
@@ -578,77 +573,104 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
     </section>
 
     <footer>
-      <span>LAB OPS PORTAL &bull; DESIGNED FOR HIGH AVAILABILITY &bull; CÉLIO ASSIS</span>
+      <span>Célio Assis &bull; Documentação Técnica &amp; Operações de Infraestrutura IP &bull; 2026</span>
     </footer>
   </div>
 
   <script>
-    /* 1. BACKGROUND ELEGANTE & MADURO (TRAFFIC MESH EM VELOCIDADE SUAVE) */
-    const canvas = document.getElementById('bg-canvas');
-    const ctx = canvas.getContext('2d');
-    let width = canvas.width = window.innerWidth;
-    let height = canvas.height = window.innerHeight;
+    /* 1. GPON LOSS CALCULATOR */
+    function calcGPON() {
+      const tx = parseFloat(document.getElementById('gpon-tx').value) || 0;
+      const km = parseFloat(document.getElementById('gpon-km').value) || 0;
+      const split1 = parseFloat(document.getElementById('gpon-split1').value) || 0;
+      const split2 = parseFloat(document.getElementById('gpon-split2').value) || 0;
 
-    let nodes = [];
-    const totalNodes = Math.min(Math.floor((width * height) / 22000), 45);
+      const fiberLoss = km * 0.35;
+      const fusionLoss = 0.5; // perda média em fusões e conectores
+      const totalSplit = split1 + split2;
+      const totalLoss = fiberLoss + fusionLoss + totalSplit;
+      const rx = tx - totalLoss;
 
-    class NetworkNode {
-      constructor() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.vx = (Math.random() - 0.5) * 0.35;
-        this.vy = (Math.random() - 0.5) * 0.35;
-        this.radius = Math.random() * 1.2 + 0.8;
-      }
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        if (this.x < 0 || this.x > width) this.vx *= -1;
-        if (this.y < 0 || this.y > height) this.vy *= -1;
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(47, 129, 247, 0.4)';
-        ctx.fill();
+      document.getElementById('gpon-loss-fiber').innerText = `${fiberLoss.toFixed(2)} dB (${km} km)`;
+      document.getElementById('gpon-loss-splitters').innerText = `${totalSplit.toFixed(2)} dB`;
+      
+      const rxElem = document.getElementById('gpon-rx-final');
+      const statusElem = document.getElementById('gpon-status');
+      rxElem.innerText = `${rx.toFixed(2)} dBm`;
+
+      if (rx >= -24.5 && rx <= -15.0) {
+        rxElem.style.color = 'var(--accent-green)';
+        statusElem.innerText = 'SINAL IDEAL (Excelente)';
+        statusElem.style.color = 'var(--accent-green)';
+      } else if (rx < -24.5 && rx >= -27.0) {
+        rxElem.style.color = 'var(--accent-orange)';
+        statusElem.innerText = 'SINAL LIMÍTROFE (Atenção)';
+        statusElem.style.color = 'var(--accent-orange)';
+      } else {
+        rxElem.style.color = 'var(--accent-red)';
+        statusElem.innerText = 'SINAL CRÍTICO / OFF';
+        statusElem.style.color = 'var(--accent-red)';
       }
     }
-
-    for (let i = 0; i < totalNodes; i++) nodes.push(new NetworkNode());
-
-    let packetProgress = 0;
-    function render() {
-      ctx.clearRect(0, 0, width, height);
-
-      for (let i = 0; i < nodes.length; i++) {
-        nodes[i].update();
-        nodes[i].draw();
-
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[i].x - nodes[j].x;
-          const dy = nodes[i].y - nodes[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < 160) {
-            ctx.beginPath();
-            ctx.moveTo(nodes[i].x, nodes[i].y);
-            ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.strokeStyle = `rgba(47, 129, 247, ${0.12 * (1 - dist / 160)})`;
-            ctx.lineWidth = 0.6;
-            ctx.stroke();
-          }
-        }
-      }
-      requestAnimationFrame(render);
-    }
-    render();
-
-    window.addEventListener('resize', () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+    ['gpon-tx', 'gpon-km', 'gpon-split1', 'gpon-split2'].forEach(id => {
+      document.getElementById(id).addEventListener('input', calcGPON);
     });
+    calcGPON();
 
-    /* 2. TERMINAL CLI DINÂMICO */
+    /* 2. GERADOR ROUTEROS */
+    function updateGenerator() {
+      const iface = document.getElementById('gen-int').value.trim() || 'ether2';
+      const ip = document.getElementById('gen-ip').value.trim() || '10.100.1.1/30';
+      const loop = document.getElementById('gen-loopback').value.trim() || '10.255.0.1';
+
+      const script = `/ip address add address=${ip} interface=${iface} comment="PTP Core"
+/routing ospf instance add name=ospf-core router-id=${loop} disabled=no
+/routing ospf area add name=backbone-core instance=ospf-core area-id=0.0.0.0
+/routing ospf interface-template add area=backbone-core interfaces=${iface} type=ptp
+/mpls ldp set enabled=yes lsr-id=${loop} transport-address=${loop}
+/mpls ldp interface add interface=${iface}`;
+
+      document.getElementById('gen-code').innerText = script;
+    }
+    ['gen-int', 'gen-ip', 'gen-loopback'].forEach(id => {
+      document.getElementById(id).addEventListener('input', updateGenerator);
+    });
+    updateGenerator();
+
+    /* 3. CALCULADORA CIDR */
+    const calcInput = document.getElementById('calc-input');
+    function ipToInt(ip) {
+      return ip.split('.').reduce((acc, oct) => (acc << 8) + parseInt(oct, 10), 0) >>> 0;
+    }
+    function intToIp(int) {
+      return [(int >>> 24) & 255, (int >>> 16) & 255, (int >>> 8) & 255, int & 255].join('.');
+    }
+    function updateCalc() {
+      const val = calcInput.value.trim();
+      if (!val.includes('/')) return;
+      const [ipStr, cidrStr] = val.split('/');
+      const cidr = parseInt(cidrStr, 10);
+      if (isNaN(cidr) || cidr < 0 || cidr > 32) return;
+
+      try {
+        const ip = ipToInt(ipStr);
+        const mask = cidr === 0 ? 0 : (~0 << (32 - cidr)) >>> 0;
+        const wildcard = ~mask >>> 0;
+        const net = (ip & mask) >>> 0;
+        const bcast = (net | wildcard) >>> 0;
+
+        document.getElementById('res-net').innerText = intToIp(net) + '/' + cidr;
+        document.getElementById('res-mask').innerText = intToIp(mask);
+        document.getElementById('res-wild').innerText = intToIp(wildcard);
+        document.getElementById('res-first').innerText = cidr >= 31 ? intToIp(net) : intToIp(net + 1);
+        document.getElementById('res-last').innerText = cidr >= 31 ? intToIp(bcast) : intToIp(bcast - 1);
+        document.getElementById('res-bcast').innerText = intToIp(bcast);
+      } catch (e) {}
+    }
+    calcInput.addEventListener('input', updateCalc);
+    updateCalc();
+
+    /* 4. TERMINAL CLI */
     const cliIn = document.getElementById('cli-in');
     const cliOut = document.getElementById('cli-out');
 
@@ -682,39 +704,7 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
       }
     });
 
-    /* 3. CALCULADORA CIDR EM TEMPO REAL */
-    const calcInput = document.getElementById('calc-input');
-    function ipToInt(ip) {
-      return ip.split('.').reduce((acc, oct) => (acc << 8) + parseInt(oct, 10), 0) >>> 0;
-    }
-    function intToIp(int) {
-      return [(int >>> 24) & 255, (int >>> 16) & 255, (int >>> 8) & 255, int & 255].join('.');
-    }
-    function updateCalc() {
-      const val = calcInput.value.trim();
-      if (!val.includes('/')) return;
-      const [ipStr, cidrStr] = val.split('/');
-      const cidr = parseInt(cidrStr, 10);
-      if (isNaN(cidr) || cidr < 0 || cidr > 32) return;
-
-      try {
-        const ip = ipToInt(ipStr);
-        const mask = cidr === 0 ? 0 : (~0 << (32 - cidr)) >>> 0;
-        const wildcard = ~mask >>> 0;
-        const net = (ip & mask) >>> 0;
-        const bcast = (net | wildcard) >>> 0;
-
-        document.getElementById('res-net').innerText = intToIp(net) + '/' + cidr;
-        document.getElementById('res-mask').innerText = intToIp(mask);
-        document.getElementById('res-wild').innerText = intToIp(wildcard);
-        document.getElementById('res-first').innerText = cidr >= 31 ? intToIp(net) : intToIp(net + 1);
-        document.getElementById('res-last').innerText = cidr >= 31 ? intToIp(bcast) : intToIp(bcast - 1);
-        document.getElementById('res-bcast').innerText = intToIp(bcast);
-      } catch (e) {}
-    }
-    calcInput.addEventListener('input', updateCalc);
-
-    /* 4. COPIAR SNIPPET */
+    /* 5. COPIAR SNIPPET */
     function copySnippet(id) {
       const text = document.getElementById(id).innerText;
       navigator.clipboard.writeText(text);
