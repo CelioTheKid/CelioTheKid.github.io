@@ -15,7 +15,7 @@
   <style>
     :root {
       --bg-base: #080b10;
-      --panel-bg: rgba(13, 17, 23, 0.85);
+      --panel-bg: rgba(13, 17, 23, 0.88);
       --panel-border: rgba(48, 54, 61, 0.7);
       --panel-border-focus: rgba(88, 166, 255, 0.5);
       --text-main: #e6edf3;
@@ -47,7 +47,7 @@
     }
 
     .container {
-      max-width: 960px;
+      max-width: 980px;
       margin: 0 auto;
     }
 
@@ -95,7 +95,7 @@
       margin-top: 1rem;
       font-size: 0.95rem;
       color: var(--text-muted);
-      max-width: 760px;
+      max-width: 780px;
       line-height: 1.6;
     }
 
@@ -341,7 +341,7 @@
 
     .copy-btn:hover { color: #fff; border-color: var(--text-muted); }
 
-    /* PILLS */
+    /* PILLS & REPOS */
     .badge-wrap { display: flex; flex-wrap: wrap; gap: 0.4rem; }
     .tech-pill {
       background: rgba(22, 27, 34, 0.9);
@@ -352,6 +352,41 @@
       padding: 0.25rem 0.55rem;
       border-radius: 4px;
     }
+
+    .repo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 0.85rem;
+    }
+
+    .repo-card {
+      background: rgba(6, 9, 14, 0.6);
+      border: 1px solid var(--panel-border);
+      border-radius: 6px;
+      padding: 1rem;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.2s ease;
+    }
+
+    .repo-card:hover { border-color: var(--accent-blue); }
+    .repo-name { font-size: 0.88rem; font-weight: 600; color: var(--accent-blue); font-family: var(--font-mono); }
+    .repo-desc { font-size: 0.78rem; color: var(--text-muted); margin: 0.4rem 0 0.8rem; line-height: 1.4; }
+    .repo-stats { font-size: 0.7rem; color: var(--text-dim); font-family: var(--font-mono); }
+
+    /* POST MORTEM CARDS */
+    .case-card {
+      background: rgba(6, 9, 14, 0.6);
+      border-left: 3px solid var(--accent-blue);
+      border-radius: 0 6px 6px 0;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+    }
+    .case-title { font-size: 0.9rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.3rem; }
+    .case-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
 
     footer {
       text-align: center;
@@ -365,7 +400,6 @@
 </head>
 <body>
   <div class="container">
-    <!-- HEADER -->
     <header>
       <div class="profile-meta">
         <div>
@@ -388,7 +422,6 @@
       </p>
     </header>
 
-    <!-- LIVE TELEMETRY -->
     <section class="card">
       <div class="card-header">
         <span class="card-title">Telemetria &amp; Estado Operacional</span>
@@ -414,10 +447,26 @@
       </div>
     </section>
 
-    <!-- CALCULADORA DE ATENUAÇÃO ÓPTICA GPON -->
     <section class="card">
       <div class="card-header">
-        <span class="card-title">Calculadora de Potência Óptica GPON (Link Loss Budget)</span>
+        <span class="card-title">Consulta Técnica BGP / ASN &amp; Prefixo IP (Whois)</span>
+        <span class="card-tag">BGP Tool</span>
+      </div>
+      <div class="form-row">
+        <input type="text" id="bgp-input" class="tech-input" placeholder="Digite um IP Público (ex: 8.8.8.8, 1.1.1.1)" value="8.8.8.8">
+        <button class="tech-btn" onclick="lookupBGP()">Consultar ASN</button>
+      </div>
+      <div class="result-grid" id="bgp-results">
+        <div><div class="metric-label">SISTEMA AUTÔNOMO (ASN)</div><div class="metric-val" id="bgp-asn">-</div></div>
+        <div><div class="metric-label">ORGANIZAÇÃO / OPERADORA</div><div class="metric-val" id="bgp-org">-</div></div>
+        <div><div class="metric-label">LOCALIZAÇÃO / PAÍS</div><div class="metric-val" id="bgp-country">-</div></div>
+        <div><div class="metric-label">STATUS DE ROTEAMENTO</div><div class="metric-val" id="bgp-status">-</div></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-header">
+        <span class="card-title">Calculadora de Potência Óptica &amp; Planejamento de CTOs (GPON)</span>
         <span class="card-tag">Engenharia FTTH</span>
       </div>
       <div class="form-row">
@@ -439,11 +488,42 @@
         <div><div class="metric-label">ATENUAÇÃO FIBRA (0.35 dB/km)</div><div class="metric-val" id="gpon-loss-fiber">-</div></div>
         <div><div class="metric-label">PERDA SPLITTERS (TEÓRICA)</div><div class="metric-val" id="gpon-loss-splitters">-</div></div>
         <div><div class="metric-label">POTÊNCIA ESTIMADA NA ONU</div><div class="metric-val" id="gpon-rx-final">-</div></div>
-        <div><div class="metric-label">STATUS DO LINK</div><div class="metric-val" id="gpon-status">-</div></div>
+        <div><div class="metric-label">CAPACIDADE &amp; STATUS</div><div class="metric-val" id="gpon-status">-</div></div>
       </div>
     </section>
 
-    <!-- GERADOR DE SCRIPT ROUTEROS -->
+    <section class="card">
+      <div class="card-header">
+        <span class="card-title">Repositórios &amp; Automações de Infraestrutura</span>
+        <span class="card-tag">GitHub Live API</span>
+      </div>
+      <div class="repo-grid" id="repos-container">
+        <div style="font-size:0.82rem; color:var(--text-muted); font-family:var(--font-mono);">Carregando repositórios do GitHub...</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-header">
+        <span class="card-title">Estudos de Caso &amp; Diagnósticos de Campo (Post-Mortem)</span>
+        <span class="card-tag">NOC Troubleshooting</span>
+      </div>
+      <div class="case-card">
+        <div class="case-title">Caso 1: Normalização de Failover Órfão &amp; Telemetria The Dude</div>
+        <div class="case-desc">
+          <strong>Cenário:</strong> Após cancelamento do link secundário (Oi), o dispositivo ficou inacessível no monitoramento The Dude da loja.<br>
+          <strong>Causa Raiz:</strong> Regras de <em>Mangle/Output</em> forçavam respostas SNMP para o gateway inexistente da Oi.<br>
+          <strong>Solução:</strong> Remoção de tabelas de rota paralelas, reestruturação da rota default na Super Soft e liberação de regras prioritárias de <em>input</em> (UDP 161 e Ping ICMP).
+        </div>
+      </div>
+      <div class="case-card" style="border-left-color: var(--accent-cyan);">
+        <div class="case-title">Caso 2: MTU/MSS Clamping em Túneis L2TP/IPsec sobre CGNAT</div>
+        <div class="case-desc">
+          <strong>Cenário:</strong> Perda intermitente de pacotes grandes em túneis interligando filiais sobre conexões residuais com CGNAT.<br>
+          <strong>Solução:</strong> Ajuste de MTU na interface virtual para 1400 bytes e aplicação de regra de <em>change-mss</em> para 1360 no firewall mangle.
+        </div>
+      </div>
+    </section>
+
     <section class="card">
       <div class="card-header">
         <span class="card-title">Gerador Rápido de Configuração MikroTik (OSPF + MPLS PTP)</span>
@@ -460,7 +540,6 @@
       </div>
     </section>
 
-    <!-- SUBNET CALCULATOR -->
     <section class="card">
       <div class="card-header">
         <span class="card-title">Calculadora de Sub-rede &amp; Máscaras CIDR</span>
@@ -479,7 +558,6 @@
       </div>
     </section>
 
-    <!-- TOPOLOGY MERMAID -->
     <section class="card">
       <div class="card-header">
         <span class="card-title">Arquitetura de Transporte &amp; Gerência Segura</span>
@@ -510,7 +588,6 @@ graph LR
       </div>
     </section>
 
-    <!-- INTERACTIVE CLI -->
     <section class="card">
       <div class="card-header">
         <span class="card-title">Console de Diagnóstico Interativo</span>
@@ -532,7 +609,6 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
       </div>
     </section>
 
-    <!-- RUNBOOKS -->
     <section class="card">
       <div class="card-header">
         <span class="card-title">Runbooks &amp; Procedimentos Rápidos de Campo</span>
@@ -554,7 +630,6 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
       </div>
     </section>
 
-    <!-- STACK -->
     <section class="card">
       <div class="card-header">
         <span class="card-title">Competências &amp; Tecnologias</span>
@@ -578,7 +653,72 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
   </div>
 
   <script>
-    /* 1. GPON LOSS CALCULATOR */
+    /* 1. BGP WHOIS LOOKUP (IP-API Integration) */
+    async function lookupBGP() {
+      const target = document.getElementById('bgp-input').value.trim();
+      if (!target) return;
+      document.getElementById('bgp-asn').innerText = 'Consultando...';
+      document.getElementById('bgp-org').innerText = 'Consultando...';
+      
+      try {
+        const res = await fetch(`https://ipapi.co/${target}/json/`);
+        const data = await res.json();
+        
+        if (data.error) {
+          document.getElementById('bgp-asn').innerText = 'Não localizado';
+          document.getElementById('bgp-org').innerText = 'IP Privado ou Inválido';
+          document.getElementById('bgp-country').innerText = '-';
+          document.getElementById('bgp-status').innerText = 'ERR';
+          return;
+        }
+
+        document.getElementById('bgp-asn').innerText = data.asn || 'N/A';
+        document.getElementById('bgp-org').innerText = data.org || data.asn_org || 'N/A';
+        document.getElementById('bgp-country').innerText = `${data.city || ''}, ${data.country_name || ''}`;
+        document.getElementById('bgp-status').innerText = 'ANUNCIADO (UP)';
+        document.getElementById('bgp-status').style.color = 'var(--accent-green)';
+      } catch (err) {
+        document.getElementById('bgp-asn').innerText = 'Erro na consulta';
+        document.getElementById('bgp-org').innerText = 'Limite de requisições excedido';
+      }
+    }
+    lookupBGP();
+
+    /* 2. GITHUB REPOS LOADER (CelioTheKid) */
+    async function loadRepos() {
+      const container = document.getElementById('repos-container');
+      try {
+        const res = await fetch('https://api.github.com/users/CelioTheKid/repos?sort=updated&per_page=4');
+        const repos = await res.json();
+        
+        if (!Array.isArray(repos) || repos.length === 0) {
+          container.innerHTML = `<div style="font-size:0.82rem; color:var(--text-muted); font-family:var(--font-mono);">Nenhum repositório público encontrado no momento.</div>`;
+          return;
+        }
+
+        container.innerHTML = '';
+        repos.forEach(repo => {
+          const card = document.createElement('a');
+          card.className = 'repo-card';
+          card.href = repo.html_url;
+          card.target = '_blank';
+          card.rel = 'noopener noreferrer';
+          card.innerHTML = `
+            <div>
+              <div class="repo-name">${repo.name}</div>
+              <div class="repo-desc">${repo.description || 'Repositório de infraestrutura e projetos de rede.'}</div>
+            </div>
+            <div class="repo-stats">★ ${repo.stargazers_count} | ⑂ ${repo.forks_count} | ${repo.language || 'Config'}</div>
+          `;
+          container.appendChild(card);
+        });
+      } catch (e) {
+        container.innerHTML = `<div style="font-size:0.82rem; color:var(--text-muted); font-family:var(--font-mono);">Não foi possível carregar os repositórios dinâmicos da API do GitHub.</div>`;
+      }
+    }
+    loadRepos();
+
+    /* 3. GPON LOSS CALCULATOR */
     function calcGPON() {
       const tx = parseFloat(document.getElementById('gpon-tx').value) || 0;
       const km = parseFloat(document.getElementById('gpon-km').value) || 0;
@@ -586,7 +726,7 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
       const split2 = parseFloat(document.getElementById('gpon-split2').value) || 0;
 
       const fiberLoss = km * 0.35;
-      const fusionLoss = 0.5; // perda média em fusões e conectores
+      const fusionLoss = 0.5;
       const totalSplit = split1 + split2;
       const totalLoss = fiberLoss + fusionLoss + totalSplit;
       const rx = tx - totalLoss;
@@ -600,15 +740,15 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
 
       if (rx >= -24.5 && rx <= -15.0) {
         rxElem.style.color = 'var(--accent-green)';
-        statusElem.innerText = 'SINAL IDEAL (Excelente)';
+        statusElem.innerText = 'IDEAL (Max 64/128 ONUs)';
         statusElem.style.color = 'var(--accent-green)';
       } else if (rx < -24.5 && rx >= -27.0) {
         rxElem.style.color = 'var(--accent-orange)';
-        statusElem.innerText = 'SINAL LIMÍTROFE (Atenção)';
+        statusElem.innerText = 'LIMÍTROFE (Atenção)';
         statusElem.style.color = 'var(--accent-orange)';
       } else {
         rxElem.style.color = 'var(--accent-red)';
-        statusElem.innerText = 'SINAL CRÍTICO / OFF';
+        statusElem.innerText = 'CRÍTICO / FORA DA FAIXA';
         statusElem.style.color = 'var(--accent-red)';
       }
     }
@@ -617,7 +757,7 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
     });
     calcGPON();
 
-    /* 2. GERADOR ROUTEROS */
+    /* 4. GERADOR ROUTEROS */
     function updateGenerator() {
       const iface = document.getElementById('gen-int').value.trim() || 'ether2';
       const ip = document.getElementById('gen-ip').value.trim() || '10.100.1.1/30';
@@ -637,7 +777,7 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
     });
     updateGenerator();
 
-    /* 3. CALCULADORA CIDR */
+    /* 5. CALCULADORA CIDR */
     const calcInput = document.getElementById('calc-input');
     function ipToInt(ip) {
       return ip.split('.').reduce((acc, oct) => (acc << 8) + parseInt(oct, 10), 0) >>> 0;
@@ -670,7 +810,7 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
     calcInput.addEventListener('input', updateCalc);
     updateCalc();
 
-    /* 4. TERMINAL CLI */
+    /* 6. TERMINAL CLI */
     const cliIn = document.getElementById('cli-in');
     const cliOut = document.getElementById('cli-out');
 
@@ -704,7 +844,7 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
       }
     });
 
-    /* 5. COPIAR SNIPPET */
+    /* 7. COPIAR SNIPPET */
     function copySnippet(id) {
       const text = document.getElementById(id).innerText;
       navigator.clipboard.writeText(text);
