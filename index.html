@@ -26,6 +26,9 @@
       --accent-green: #3fb950;
       --accent-orange: #d29922;
       --accent-red: #f85149;
+      --dude-up: #238636;
+      --dude-warn: #9e6a03;
+      --dude-down: #da3633;
       --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
@@ -163,97 +166,79 @@
       text-transform: uppercase;
     }
 
-    /* TELEMETRIA */
-    .telemetry-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 0.85rem;
-    }
-
-    .telemetry-card {
-      background: rgba(10, 13, 18, 0.6);
+    /* THE DUDE NETWORK MAP CONTAINER */
+    .dude-canvas-wrap {
+      position: relative;
+      background: #020408;
       border: 1px solid var(--panel-border);
-      padding: 1rem;
       border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 1rem;
     }
 
-    .telemetry-header {
+    #dude-canvas {
+      display: block;
+      width: 100%;
+      height: 380px;
+    }
+
+    .dude-controls {
       display: flex;
-      justify-content: space-between;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .btn-sim {
+      background: rgba(22, 27, 34, 0.85);
+      border: 1px solid var(--panel-border);
+      color: var(--text-main);
+      font-family: var(--font-mono);
       font-size: 0.75rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-sim:hover { border-color: var(--accent-blue); }
+
+    /* PROBE TABLE */
+    .probe-table {
+      width: 100%;
+      border-collapse: collapse;
       font-family: var(--font-mono);
-      color: var(--text-muted);
-      margin-bottom: 0.4rem;
-    }
-
-    .telemetry-val {
-      font-size: 1.15rem;
-      font-weight: 600;
-      font-family: var(--font-mono);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-    }
-
-    .pulse-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background-color: var(--accent-green);
-      box-shadow: 0 0 10px var(--accent-green);
-    }
-
-    /* DIAGRAMA */
-    .mermaid-wrapper {
+      font-size: 0.78rem;
       background: rgba(6, 9, 14, 0.6);
       border: 1px solid var(--panel-border);
-      border-radius: 8px;
-      padding: 1.25rem;
-      overflow-x: auto;
-    }
-
-    /* CLI */
-    .cli-box {
-      background: #040608;
-      border: 1px solid var(--panel-border);
-      border-radius: 8px;
-      font-family: var(--font-mono);
-      font-size: 0.82rem;
+      border-radius: 6px;
       overflow: hidden;
     }
 
-    .cli-bar {
-      background: #0d1117;
-      padding: 0.4rem 0.8rem;
-      border-bottom: 1px solid var(--panel-border);
-      display: flex;
-      justify-content: space-between;
+    .probe-table th, .probe-table td {
+      padding: 0.6rem 0.8rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(48, 54, 61, 0.4);
+    }
+
+    .probe-table th {
+      background: rgba(13, 17, 23, 0.9);
       color: var(--text-muted);
-      font-size: 0.72rem;
+      font-size: 0.7rem;
+      text-transform: uppercase;
     }
 
-    .cli-body { padding: 1rem; }
-    .cli-output {
-      color: #7ee787;
-      white-space: pre-wrap;
-      max-height: 180px;
-      overflow-y: auto;
-      line-height: 1.6;
-      margin-bottom: 0.5rem;
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.7rem;
     }
-
-    .cli-input-row { display: flex; align-items: center; gap: 0.4rem; }
-    .cli-prompt { color: var(--accent-blue); }
-    .cli-input {
-      background: transparent;
-      border: none;
-      outline: none;
-      color: #fff;
-      font-family: inherit;
-      font-size: inherit;
-      flex-grow: 1;
-    }
+    .status-badge.up { background: rgba(35, 134, 54, 0.2); color: var(--accent-green); border: 1px solid rgba(35, 134, 54, 0.4); }
+    .status-badge.warn { background: rgba(158, 106, 3, 0.2); color: var(--accent-orange); border: 1px solid rgba(158, 106, 3, 0.4); }
+    .status-badge.down { background: rgba(218, 54, 51, 0.2); color: var(--accent-red); border: 1px solid rgba(218, 54, 51, 0.4); }
 
     /* INPUTS & UTILS */
     .form-row {
@@ -276,8 +261,6 @@
       min-width: 160px;
     }
 
-    .tech-input:focus, .tech-select:focus { border-color: var(--accent-blue); }
-
     .tech-btn {
       background: var(--accent-blue);
       color: #fff;
@@ -288,9 +271,7 @@
       padding: 0.55rem 1rem;
       border-radius: 6px;
       cursor: pointer;
-      transition: background 0.2s;
     }
-    .tech-btn:hover { background: #1f6feb; }
 
     .result-grid {
       display: grid;
@@ -336,12 +317,58 @@
       padding: 0.2rem 0.5rem;
       border-radius: 4px;
       cursor: pointer;
-      transition: all 0.2s;
     }
 
-    .copy-btn:hover { color: #fff; border-color: var(--text-muted); }
+    /* CLI */
+    .cli-box {
+      background: #040608;
+      border: 1px solid var(--panel-border);
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      overflow: hidden;
+    }
+    .cli-bar {
+      background: #0d1117;
+      padding: 0.4rem 0.8rem;
+      border-bottom: 1px solid var(--panel-border);
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+    }
+    .cli-body { padding: 1rem; }
+    .cli-output { color: #7ee787; white-space: pre-wrap; max-height: 180px; overflow-y: auto; margin-bottom: 0.5rem; }
+    .cli-input-row { display: flex; align-items: center; gap: 0.4rem; }
+    .cli-prompt { color: var(--accent-blue); }
+    .cli-input { background: transparent; border: none; outline: none; color: #fff; font-family: inherit; font-size: inherit; flex-grow: 1; }
 
-    /* PILLS & REPOS */
+    /* REPOS & CASES */
+    .repo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.85rem; }
+    .repo-card {
+      background: rgba(6, 9, 14, 0.6);
+      border: 1px solid var(--panel-border);
+      border-radius: 6px;
+      padding: 1rem;
+      text-decoration: none;
+      color: inherit;
+    }
+    .repo-card:hover { border-color: var(--accent-blue); }
+    .repo-name { font-size: 0.88rem; font-weight: 600; color: var(--accent-blue); font-family: var(--font-mono); }
+    .repo-desc { font-size: 0.78rem; color: var(--text-muted); margin: 0.4rem 0 0.8rem; }
+    .repo-stats { font-size: 0.7rem; color: var(--text-dim); font-family: var(--font-mono); }
+
+    .case-card {
+      background: rgba(6, 9, 14, 0.6);
+      border-left: 3px solid var(--accent-blue);
+      border-radius: 0 6px 6px 0;
+      padding: 1rem;
+      margin-bottom: 0.85rem;
+    }
+    .case-title { font-size: 0.9rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.3rem; }
+    .case-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* PILLS */
     .badge-wrap { display: flex; flex-wrap: wrap; gap: 0.4rem; }
     .tech-pill {
       background: rgba(22, 27, 34, 0.9);
@@ -352,41 +379,6 @@
       padding: 0.25rem 0.55rem;
       border-radius: 4px;
     }
-
-    .repo-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 0.85rem;
-    }
-
-    .repo-card {
-      background: rgba(6, 9, 14, 0.6);
-      border: 1px solid var(--panel-border);
-      border-radius: 6px;
-      padding: 1rem;
-      text-decoration: none;
-      color: inherit;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: border-color 0.2s ease;
-    }
-
-    .repo-card:hover { border-color: var(--accent-blue); }
-    .repo-name { font-size: 0.88rem; font-weight: 600; color: var(--accent-blue); font-family: var(--font-mono); }
-    .repo-desc { font-size: 0.78rem; color: var(--text-muted); margin: 0.4rem 0 0.8rem; line-height: 1.4; }
-    .repo-stats { font-size: 0.7rem; color: var(--text-dim); font-family: var(--font-mono); }
-
-    /* POST MORTEM CARDS */
-    .case-card {
-      background: rgba(6, 9, 14, 0.6);
-      border-left: 3px solid var(--accent-blue);
-      border-radius: 0 6px 6px 0;
-      padding: 1rem;
-      margin-bottom: 0.85rem;
-    }
-    .case-title { font-size: 0.9rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.3rem; }
-    .case-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
 
     footer {
       text-align: center;
@@ -400,6 +392,7 @@
 </head>
 <body>
   <div class="container">
+    <!-- HEADER -->
     <header>
       <div class="profile-meta">
         <div>
@@ -422,31 +415,41 @@
       </p>
     </header>
 
+    <!-- THE DUDE LIVE TOPOLOGY MAP -->
     <section class="card">
       <div class="card-header">
-        <span class="card-title">Telemetria &amp; Estado Operacional</span>
-        <span class="card-tag">Monitoramento Ativo</span>
+        <span class="card-title">The Dude Network Map &bull; Live Telemetry Topology</span>
+        <span class="card-tag">MikroTik The Dude v7</span>
       </div>
-      <div class="telemetry-grid">
-        <div class="telemetry-card">
-          <div class="telemetry-header"><span>WIREGUARD VPN</span><span>UDP 51820</span></div>
-          <div class="telemetry-val"><div class="pulse-dot"></div> ACTIVE</div>
-        </div>
-        <div class="telemetry-card">
-          <div class="telemetry-header"><span>L2TP / IPSEC PEER</span><span>DYNAMIC</span></div>
-          <div class="telemetry-val"><div class="pulse-dot"></div> ESTABLISHED</div>
-        </div>
-        <div class="telemetry-card">
-          <div class="telemetry-header"><span>IGP ROUTING (OSPF)</span><span>AREA 0</span></div>
-          <div class="telemetry-val"><div class="pulse-dot"></div> CONVERGED</div>
-        </div>
-        <div class="telemetry-card">
-          <div class="telemetry-header"><span>SYS ARCHITECTURE</span><span>RB493 / v7</span></div>
-          <div class="telemetry-val" style="color: var(--accent-cyan);">ROUTEROS v7.6</div>
-        </div>
+
+      <div class="dude-controls">
+        <button class="btn-sim" onclick="toggleNode('oi')">Simular Falha/Recuperação Link Oi</button>
+        <button class="btn-sim" onclick="toggleNode('snmp')">Alternar Probe SNMP (Magalhães)</button>
+        <button class="btn-sim" onclick="toggleNode('olt')">Simular Queda de OLT</button>
+        <button class="btn-sim" onclick="resetDude()">Resetar Topologia</button>
       </div>
+
+      <div class="dude-canvas-wrap">
+        <canvas id="dude-canvas"></canvas>
+      </div>
+
+      <table class="probe-table">
+        <thead>
+          <tr>
+            <th>Dispositivo / Node</th>
+            <th>Endereço IP</th>
+            <th>Probes Ativos</th>
+            <th>RTT / Latência</th>
+            <th>Status The Dude</th>
+          </tr>
+        </thead>
+        <tbody id="probe-tbody">
+          <!-- Gerado dinamicamente pelo script -->
+        </tbody>
+      </table>
     </section>
 
+    <!-- BGP / ASN / WHOIS LOOKUP -->
     <section class="card">
       <div class="card-header">
         <span class="card-title">Consulta Técnica BGP / ASN &amp; Prefixo IP (Whois)</span>
@@ -464,6 +467,7 @@
       </div>
     </section>
 
+    <!-- GPON BUDGET & SIMULADOR DE CTOs -->
     <section class="card">
       <div class="card-header">
         <span class="card-title">Calculadora de Potência Óptica &amp; Planejamento de CTOs (GPON)</span>
@@ -492,6 +496,7 @@
       </div>
     </section>
 
+    <!-- GITHUB REPOSITORIES (DINÂMICO) -->
     <section class="card">
       <div class="card-header">
         <span class="card-title">Repositórios &amp; Automações de Infraestrutura</span>
@@ -502,6 +507,7 @@
       </div>
     </section>
 
+    <!-- POST MORTEM / CASOS RESOLVIDOS -->
     <section class="card">
       <div class="card-header">
         <span class="card-title">Estudos de Caso &amp; Diagnósticos de Campo (Post-Mortem)</span>
@@ -524,6 +530,7 @@
       </div>
     </section>
 
+    <!-- GERADOR DE SCRIPT ROUTEROS -->
     <section class="card">
       <div class="card-header">
         <span class="card-title">Gerador Rápido de Configuração MikroTik (OSPF + MPLS PTP)</span>
@@ -540,6 +547,7 @@
       </div>
     </section>
 
+    <!-- SUBNET CALCULATOR -->
     <section class="card">
       <div class="card-header">
         <span class="card-title">Calculadora de Sub-rede &amp; Máscaras CIDR</span>
@@ -558,36 +566,7 @@
       </div>
     </section>
 
-    <section class="card">
-      <div class="card-header">
-        <span class="card-title">Arquitetura de Transporte &amp; Gerência Segura</span>
-        <span class="card-tag">Layer 2 / Layer 3 Overlay</span>
-      </div>
-      <div class="mermaid-wrapper">
-        <div class="mermaid">
-graph LR
-    subgraph OVERLAY_VPN [Camada de Acesso Operacional]
-        MOBILE["📱 Smartphone Client<br>10.20.20.2 (WireGuard)"]
-        REMOTE_RB["🏢 Remote Node (Mateus)<br>10.10.10.48 (L2TP/IPsec)"]
-    end
-
-    subgraph CORE_INFRA [Core de Roteamento & BRAS]
-        ROUTER["⚡ MikroTik Core Gateway<br>LSR-ID: 10.255.255.1"]
-    end
-
-    subgraph ACCESS_GPON [Agregação & Acesso Óptico]
-        OLT["🔌 OLT ZTE GPON / Switch"]
-        FTTH["🏠 Redes FTTH / Clientes"]
-    end
-
-    MOBILE -->|Túnel Criptografado ChaCha20| ROUTER
-    REMOTE_RB -->|IKEv1 AES-CBC Phase 2| ROUTER
-    ROUTER ===|VPLS / MPLS L2 Pseudowire| OLT
-    OLT --- FTTH
-        </div>
-      </div>
-    </section>
-
+    <!-- INTERACTIVE CLI -->
     <section class="card">
       <div class="card-header">
         <span class="card-title">Console de Diagnóstico Interativo</span>
@@ -609,6 +588,7 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
       </div>
     </section>
 
+    <!-- RUNBOOKS -->
     <section class="card">
       <div class="card-header">
         <span class="card-title">Runbooks &amp; Procedimentos Rápidos de Campo</span>
@@ -630,6 +610,7 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
       </div>
     </section>
 
+    <!-- STACK -->
     <section class="card">
       <div class="card-header">
         <span class="card-title">Competências &amp; Tecnologias</span>
@@ -637,6 +618,7 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
       </div>
       <div class="badge-wrap">
         <span class="tech-pill">MikroTik RouterOS v7</span>
+        <span class="tech-pill">The Dude Server &amp; Probes</span>
         <span class="tech-pill">WireGuard Protocol</span>
         <span class="tech-pill">L2TP / IPsec Suite</span>
         <span class="tech-pill">OSPF Multi-Area</span>
@@ -653,7 +635,176 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
   </div>
 
   <script>
-    /* 1. BGP WHOIS LOOKUP (IP-API Integration) */
+    /* ==========================================================
+       1. THE DUDE NETWORK MAP ENGINE (CANVAS INTERATIVO)
+       ========================================================== */
+    const dCanvas = document.getElementById('dude-canvas');
+    const dCtx = dCanvas.getContext('2d');
+    
+    function resizeDude() {
+      dCanvas.width = dCanvas.parentElement.clientWidth;
+      dCanvas.height = 380;
+    }
+    window.addEventListener('resize', () => { resizeDude(); drawDude(); });
+    resizeDude();
+
+    let dudeNodes = [
+      { id: 'dude-srv', name: 'The Dude Server', ip: '172.30.0.252', x: 0.18, y: 0.25, status: 'up', probes: 'Ping, SNMP, HTTPS', rtt: '1.2ms' },
+      { id: 'core-pop', name: 'Core BRAS (RB493)', ip: '10.255.255.1', x: 0.50, y: 0.25, status: 'up', probes: 'Ping, SNMP, OSPF', rtt: '4.8ms' },
+      { id: 'magalhaes', name: 'Cliente Magalhães', ip: '168.227.124.54', x: 0.82, y: 0.25, status: 'up', probes: 'Ping, SNMP (UDP 161)', rtt: '18.4ms' },
+      { id: 'supersoft', name: 'Trânsito SuperSoft', ip: '172.16.1.1', x: 0.35, y: 0.75, status: 'up', probes: 'BGP, Ping, WireGuard', rtt: '8.1ms' },
+      { id: 'oi-link', name: 'Link Secundário (Oi)', ip: '10.0.0.1', x: 0.65, y: 0.75, status: 'down', probes: 'ICMP Gateway', rtt: 'TIMEOUT' },
+      { id: 'gpon-olt', name: 'OLT ZTE GPON', ip: '192.168.100.1', x: 0.85, y: 0.75, status: 'up', probes: 'Ping, SNMP Optical', rtt: '2.4ms' }
+    ];
+
+    let dudeLinks = [
+      { from: 'dude-srv', to: 'core-pop', speed: '1 Gbps', load: '45 Mbps' },
+      { from: 'core-pop', to: 'supersoft', speed: '1 Gbps', load: '180 Mbps' },
+      { from: 'core-pop', to: 'oi-link', speed: '100 Mbps', load: '0 Mbps' },
+      { from: 'core-pop', to: 'magalhaes', speed: '100 Mbps', load: '12 Mbps' },
+      { from: 'magalhaes', to: 'gpon-olt', speed: '1 Gbps', load: '85 Mbps' }
+    ];
+
+    function drawDude() {
+      dCtx.clearRect(0, 0, dCanvas.width, dCanvas.height);
+      const w = dCanvas.width;
+      const h = dCanvas.height;
+
+      // Grade de fundo The Dude
+      dCtx.strokeStyle = 'rgba(48, 54, 61, 0.25)';
+      dCtx.lineWidth = 1;
+      for (let x = 0; x < w; x += 25) {
+        dCtx.beginPath(); dCtx.moveTo(x, 0); dCtx.lineTo(x, h); dCtx.stroke();
+      }
+      for (let y = 0; y < h; y += 25) {
+        dCtx.beginPath(); dCtx.moveTo(0, y); dCtx.lineTo(w, y); dCtx.stroke();
+      }
+
+      // Desenhar Links
+      dudeLinks.forEach(link => {
+        const n1 = dudeNodes.find(n => n.id === link.from);
+        const n2 = dudeNodes.find(n => n.id === link.to);
+        const x1 = n1.x * w, y1 = n1.y * h;
+        const x2 = n2.x * w, y2 = n2.y * h;
+
+        dCtx.beginPath();
+        dCtx.moveTo(x1, y1);
+        dCtx.lineTo(x2, y2);
+        
+        if (n1.status === 'down' || n2.status === 'down') {
+          dCtx.strokeStyle = '#da3633';
+          dCtx.setLineDash([4, 4]);
+        } else if (n1.status === 'warn' || n2.status === 'warn') {
+          dCtx.strokeStyle = '#d29922';
+          dCtx.setLineDash([]);
+        } else {
+          dCtx.strokeStyle = '#238636';
+          dCtx.setLineDash([]);
+        }
+        dCtx.lineWidth = 2;
+        dCtx.stroke();
+        dCtx.setLineDash([]);
+
+        // Badge de taxa no meio do enlace
+        const midX = (x1 + x2) / 2;
+        const midY = (y1 + y2) / 2;
+        dCtx.fillStyle = '#0d1117';
+        dCtx.fillRect(midX - 28, midY - 9, 56, 18);
+        dCtx.strokeStyle = 'rgba(48, 54, 61, 0.8)';
+        dCtx.strokeRect(midX - 28, midY - 9, 56, 18);
+        dCtx.fillStyle = '#8b949e';
+        dCtx.font = '10px "JetBrains Mono"';
+        dCtx.textAlign = 'center';
+        dCtx.fillText(link.load, midX, midY + 4);
+      });
+
+      // Desenhar Nós (Boxes retangulares clássicas do The Dude)
+      dudeNodes.forEach(node => {
+        const nx = node.x * w;
+        const ny = node.y * h;
+        const boxW = 135;
+        const boxH = 46;
+
+        let statusColor = '#238636';
+        if (node.status === 'warn') statusColor = '#9e6a03';
+        if (node.status === 'down') statusColor = '#da3633';
+
+        // Caixa externa
+        dCtx.fillStyle = 'rgba(13, 17, 23, 0.95)';
+        dCtx.fillRect(nx - boxW/2, ny - boxH/2, boxW, boxH);
+        
+        dCtx.strokeStyle = statusColor;
+        dCtx.lineWidth = 2;
+        dCtx.strokeRect(nx - boxW/2, ny - boxH/2, boxW, boxH);
+
+        // Barra de status lateral
+        dCtx.fillStyle = statusColor;
+        dCtx.fillRect(nx - boxW/2, ny - boxH/2, 6, boxH);
+
+        // Textos do Nó
+        dCtx.fillStyle = '#ffffff';
+        dCtx.font = 'bold 11px "Inter"';
+        dCtx.textAlign = 'left';
+        dCtx.fillText(node.name, nx - boxW/2 + 12, ny - 6);
+
+        dCtx.fillStyle = '#8b949e';
+        dCtx.font = '10px "JetBrains Mono"';
+        dCtx.fillText(node.ip, nx - boxW/2 + 12, ny + 12);
+      });
+
+      updateProbeTable();
+    }
+
+    function updateProbeTable() {
+      const tbody = document.getElementById('probe-tbody');
+      tbody.innerHTML = '';
+      dudeNodes.forEach(n => {
+        const tr = document.createElement('tr');
+        let badgeClass = 'up';
+        let badgeText = 'UP (OK)';
+        if (n.status === 'warn') { badgeClass = 'warn'; badgeText = 'WARNING'; }
+        if (n.status === 'down') { badgeClass = 'down'; badgeText = 'DOWN (OFF)'; }
+
+        tr.innerHTML = `
+          <td><strong>${n.name}</strong></td>
+          <td>${n.ip}</td>
+          <td>${n.probes}</td>
+          <td>${n.rtt}</td>
+          <td><span class="status-badge ${badgeClass}">${badgeText}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function toggleNode(type) {
+      if (type === 'oi') {
+        const oi = dudeNodes.find(n => n.id === 'oi-link');
+        oi.status = oi.status === 'down' ? 'up' : 'down';
+        oi.rtt = oi.status === 'up' ? '12.4ms' : 'TIMEOUT';
+      } else if (type === 'snmp') {
+        const mag = dudeNodes.find(n => n.id === 'magalhaes');
+        mag.status = mag.status === 'up' ? 'warn' : 'up';
+        mag.rtt = mag.status === 'warn' ? '142ms (Loss 20%)' : '18.4ms';
+      } else if (type === 'olt') {
+        const olt = dudeNodes.find(n => n.id === 'gpon-olt');
+        olt.status = olt.status === 'up' ? 'down' : 'up';
+        olt.rtt = olt.status === 'down' ? 'NO RESPONSE' : '2.4ms';
+      }
+      drawDude();
+    }
+
+    function resetDude() {
+      dudeNodes[0].status = 'up'; dudeNodes[0].rtt = '1.2ms';
+      dudeNodes[1].status = 'up'; dudeNodes[1].rtt = '4.8ms';
+      dudeNodes[2].status = 'up'; dudeNodes[2].rtt = '18.4ms';
+      dudeNodes[3].status = 'up'; dudeNodes[3].rtt = '8.1ms';
+      dudeNodes[4].status = 'down'; dudeNodes[4].rtt = 'TIMEOUT';
+      dudeNodes[5].status = 'up'; dudeNodes[5].rtt = '2.4ms';
+      drawDude();
+    }
+    setTimeout(drawDude, 100);
+
+    /* 2. BGP WHOIS LOOKUP (IP-API Integration) */
     async function lookupBGP() {
       const target = document.getElementById('bgp-input').value.trim();
       if (!target) return;
@@ -684,7 +835,7 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
     }
     lookupBGP();
 
-    /* 2. GITHUB REPOS LOADER (CelioTheKid) */
+    /* 3. GITHUB REPOS LOADER (CelioTheKid) */
     async function loadRepos() {
       const container = document.getElementById('repos-container');
       try {
@@ -718,7 +869,7 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
     }
     loadRepos();
 
-    /* 3. GPON LOSS CALCULATOR */
+    /* 4. GPON LOSS CALCULATOR */
     function calcGPON() {
       const tx = parseFloat(document.getElementById('gpon-tx').value) || 0;
       const km = parseFloat(document.getElementById('gpon-km').value) || 0;
@@ -757,7 +908,7 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
     });
     calcGPON();
 
-    /* 4. GERADOR ROUTEROS */
+    /* 5. GERADOR ROUTEROS */
     function updateGenerator() {
       const iface = document.getElementById('gen-int').value.trim() || 'ether2';
       const ip = document.getElementById('gen-ip').value.trim() || '10.100.1.1/30';
@@ -777,7 +928,7 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
     });
     updateGenerator();
 
-    /* 5. CALCULADORA CIDR */
+    /* 6. CALCULADORA CIDR */
     const calcInput = document.getElementById('calc-input');
     function ipToInt(ip) {
       return ip.split('.').reduce((acc, oct) => (acc << 8) + parseInt(oct, 10), 0) >>> 0;
@@ -810,7 +961,7 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
     calcInput.addEventListener('input', updateCalc);
     updateCalc();
 
-    /* 6. TERMINAL CLI */
+    /* 7. TERMINAL CLI */
     const cliIn = document.getElementById('cli-in');
     const cliOut = document.getElementById('cli-out');
 
@@ -844,7 +995,7 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
       }
     });
 
-    /* 7. COPIAR SNIPPET */
+    /* 8. COPIAR SNIPPET */
     function copySnippet(id) {
       const text = document.getElementById(id).innerText;
       navigator.clipboard.writeText(text);
