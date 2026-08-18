@@ -26,9 +26,6 @@
       --accent-green: #3fb950;
       --accent-orange: #d29922;
       --accent-red: #f85149;
-      --dude-up: #238636;
-      --dude-warn: #9e6a03;
-      --dude-down: #da3633;
       --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
@@ -411,7 +408,7 @@
         </div>
       </div>
       <p class="bio">
-        Projetos de engenharia e contingência de borda, túneis criptografados de alta disponibilidade, roteamento dinâmico (OSPF/BGP) e convergência de transporte L2/L3 para operadoras e provedores de internet.
+        Projetos de engenharia e contingência de borda, túneis criptografados de alta disponibilidade, roteamento dinâmico (OSPF/BGP) e convergência de transporte L2/L3 para operadoras e redes corporativas.
       </p>
     </header>
 
@@ -423,8 +420,8 @@
       </div>
 
       <div class="dude-controls">
-        <button class="btn-sim" onclick="toggleNode('oi')">Simular Falha/Recuperação Link Oi</button>
-        <button class="btn-sim" onclick="toggleNode('snmp')">Alternar Probe SNMP (Magalhães)</button>
+        <button class="btn-sim" onclick="toggleNode('backup')">Simular Falha/Recuperação Link Backup</button>
+        <button class="btn-sim" onclick="toggleNode('snmp')">Alternar Probe SNMP (Edge Router)</button>
         <button class="btn-sim" onclick="toggleNode('olt')">Simular Queda de OLT</button>
         <button class="btn-sim" onclick="resetDude()">Resetar Topologia</button>
       </div>
@@ -444,7 +441,7 @@
           </tr>
         </thead>
         <tbody id="probe-tbody">
-          <!-- Gerado dinamicamente pelo script -->
+          <!-- Gerado dinamicamente -->
         </tbody>
       </table>
     </section>
@@ -516,16 +513,16 @@
       <div class="case-card">
         <div class="case-title">Caso 1: Normalização de Failover Órfão &amp; Telemetria The Dude</div>
         <div class="case-desc">
-          <strong>Cenário:</strong> Após cancelamento do link secundário (Oi), o dispositivo ficou inacessível no monitoramento The Dude da loja.<br>
-          <strong>Causa Raiz:</strong> Regras de <em>Mangle/Output</em> forçavam respostas SNMP para o gateway inexistente da Oi.<br>
-          <strong>Solução:</strong> Remoção de tabelas de rota paralelas, reestruturação da rota default na Super Soft e liberação de regras prioritárias de <em>input</em> (UDP 161 e Ping ICMP).
+          <strong>Cenário:</strong> Após o cancelamento do link secundário, a RB remota perdeu comunicação com o servidor The Dude central.<br>
+          <strong>Causa Raiz:</strong> Regras residuais de <em>Mangle/Output</em> redirecionavam o tráfego SNMP para a tabela de rota do gateway inativo.<br>
+          <strong>Solução:</strong> Limpeza estrutural de tabelas paralelas, fixação da rota default no link ativo e priorização de regras de <em>input</em> (UDP 161 e Ping ICMP).
         </div>
       </div>
       <div class="case-card" style="border-left-color: var(--accent-cyan);">
         <div class="case-title">Caso 2: MTU/MSS Clamping em Túneis L2TP/IPsec sobre CGNAT</div>
         <div class="case-desc">
-          <strong>Cenário:</strong> Perda intermitente de pacotes grandes em túneis interligando filiais sobre conexões residuais com CGNAT.<br>
-          <strong>Solução:</strong> Ajuste de MTU na interface virtual para 1400 bytes e aplicação de regra de <em>change-mss</em> para 1360 no firewall mangle.
+          <strong>Cenário:</strong> Fragmentação e perda intermitente de pacotes TCP em túneis VPN interconectados sobre blocos CGNAT.<br>
+          <strong>Solução:</strong> Ajuste de MTU na interface virtual para 1400 bytes e aplicação de regra de <em>change-mss</em> (1360) no firewall mangle.
         </div>
       </div>
     </section>
@@ -649,20 +646,20 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
     resizeDude();
 
     let dudeNodes = [
-      { id: 'dude-srv', name: 'The Dude Server', ip: '172.30.0.252', x: 0.18, y: 0.25, status: 'up', probes: 'Ping, SNMP, HTTPS', rtt: '1.2ms' },
+      { id: 'dude-srv', name: 'The Dude Central', ip: '172.30.0.252', x: 0.18, y: 0.25, status: 'up', probes: 'Ping, SNMP, HTTPS', rtt: '1.2ms' },
       { id: 'core-pop', name: 'Core BRAS (RB493)', ip: '10.255.255.1', x: 0.50, y: 0.25, status: 'up', probes: 'Ping, SNMP, OSPF', rtt: '4.8ms' },
-      { id: 'magalhaes', name: 'Cliente Magalhães', ip: '168.227.124.54', x: 0.82, y: 0.25, status: 'up', probes: 'Ping, SNMP (UDP 161)', rtt: '18.4ms' },
-      { id: 'supersoft', name: 'Trânsito SuperSoft', ip: '172.16.1.1', x: 0.35, y: 0.75, status: 'up', probes: 'BGP, Ping, WireGuard', rtt: '8.1ms' },
-      { id: 'oi-link', name: 'Link Secundário (Oi)', ip: '10.0.0.1', x: 0.65, y: 0.75, status: 'down', probes: 'ICMP Gateway', rtt: 'TIMEOUT' },
+      { id: 'edge-client', name: 'Enterprise Edge', ip: '192.168.10.1', x: 0.82, y: 0.25, status: 'up', probes: 'Ping, SNMP (UDP 161)', rtt: '18.4ms' },
+      { id: 'upstream', name: 'Trânsito Primário', ip: '172.16.1.1', x: 0.35, y: 0.75, status: 'up', probes: 'BGP, Ping, WireGuard', rtt: '8.1ms' },
+      { id: 'backup-link', name: 'Link Backup (Inativo)', ip: '10.0.0.1', x: 0.65, y: 0.75, status: 'down', probes: 'ICMP Gateway', rtt: 'TIMEOUT' },
       { id: 'gpon-olt', name: 'OLT ZTE GPON', ip: '192.168.100.1', x: 0.85, y: 0.75, status: 'up', probes: 'Ping, SNMP Optical', rtt: '2.4ms' }
     ];
 
     let dudeLinks = [
       { from: 'dude-srv', to: 'core-pop', speed: '1 Gbps', load: '45 Mbps' },
-      { from: 'core-pop', to: 'supersoft', speed: '1 Gbps', load: '180 Mbps' },
-      { from: 'core-pop', to: 'oi-link', speed: '100 Mbps', load: '0 Mbps' },
-      { from: 'core-pop', to: 'magalhaes', speed: '100 Mbps', load: '12 Mbps' },
-      { from: 'magalhaes', to: 'gpon-olt', speed: '1 Gbps', load: '85 Mbps' }
+      { from: 'core-pop', to: 'upstream', speed: '1 Gbps', load: '180 Mbps' },
+      { from: 'core-pop', to: 'backup-link', speed: '100 Mbps', load: '0 Mbps' },
+      { from: 'core-pop', to: 'edge-client', speed: '100 Mbps', load: '12 Mbps' },
+      { from: 'edge-client', to: 'gpon-olt', speed: '1 Gbps', load: '85 Mbps' }
     ];
 
     function drawDude() {
@@ -718,7 +715,7 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
         dCtx.fillText(link.load, midX, midY + 4);
       });
 
-      // Desenhar Nós (Boxes retangulares clássicas do The Dude)
+      // Desenhar Nós
       dudeNodes.forEach(node => {
         const nx = node.x * w;
         const ny = node.y * h;
@@ -729,7 +726,6 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
         if (node.status === 'warn') statusColor = '#9e6a03';
         if (node.status === 'down') statusColor = '#da3633';
 
-        // Caixa externa
         dCtx.fillStyle = 'rgba(13, 17, 23, 0.95)';
         dCtx.fillRect(nx - boxW/2, ny - boxH/2, boxW, boxH);
         
@@ -737,11 +733,9 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
         dCtx.lineWidth = 2;
         dCtx.strokeRect(nx - boxW/2, ny - boxH/2, boxW, boxH);
 
-        // Barra de status lateral
         dCtx.fillStyle = statusColor;
         dCtx.fillRect(nx - boxW/2, ny - boxH/2, 6, boxH);
 
-        // Textos do Nó
         dCtx.fillStyle = '#ffffff';
         dCtx.font = 'bold 11px "Inter"';
         dCtx.textAlign = 'left';
@@ -777,14 +771,14 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
     }
 
     function toggleNode(type) {
-      if (type === 'oi') {
-        const oi = dudeNodes.find(n => n.id === 'oi-link');
-        oi.status = oi.status === 'down' ? 'up' : 'down';
-        oi.rtt = oi.status === 'up' ? '12.4ms' : 'TIMEOUT';
+      if (type === 'backup') {
+        const bk = dudeNodes.find(n => n.id === 'backup-link');
+        bk.status = bk.status === 'down' ? 'up' : 'down';
+        bk.rtt = bk.status === 'up' ? '12.4ms' : 'TIMEOUT';
       } else if (type === 'snmp') {
-        const mag = dudeNodes.find(n => n.id === 'magalhaes');
-        mag.status = mag.status === 'up' ? 'warn' : 'up';
-        mag.rtt = mag.status === 'warn' ? '142ms (Loss 20%)' : '18.4ms';
+        const edge = dudeNodes.find(n => n.id === 'edge-client');
+        edge.status = edge.status === 'up' ? 'warn' : 'up';
+        edge.rtt = edge.status === 'warn' ? '142ms (Loss 20%)' : '18.4ms';
       } else if (type === 'olt') {
         const olt = dudeNodes.find(n => n.id === 'gpon-olt');
         olt.status = olt.status === 'up' ? 'down' : 'up';
@@ -804,7 +798,7 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
     }
     setTimeout(drawDude, 100);
 
-    /* 2. BGP WHOIS LOOKUP (IP-API Integration) */
+    /* 2. BGP WHOIS LOOKUP */
     async function lookupBGP() {
       const target = document.getElementById('bgp-input').value.trim();
       if (!target) return;
@@ -835,7 +829,7 @@ Digite 'help' para exibir os comandos de diagnóstico de rede.</div>
     }
     lookupBGP();
 
-    /* 3. GITHUB REPOS LOADER (CelioTheKid) */
+    /* 3. GITHUB REPOS LOADER */
     async function loadRepos() {
       const container = document.getElementById('repos-container');
       try {
